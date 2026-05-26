@@ -14,6 +14,7 @@ const config: Config = {
         surface: "#F5F5F5",
         "accent-teal": "#EBFFFE",
         "accent-green": "#EBFFF4",
+        muted: "#3C3C3C",
       },
       fontFamily: {
         sans: ["var(--font-gabarito)", "sans-serif"],
