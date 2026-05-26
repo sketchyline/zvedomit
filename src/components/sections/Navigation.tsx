@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { X } from "lucide-react";
 
 const navLinks = [
   { label: "Proč koučování", href: "#proc-koucovani" },
@@ -12,16 +13,33 @@ const navLinks = [
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
+  const close = () => {
+    setIsOpen(false);
+    hamburgerRef.current?.focus();
+  };
+
+  // Esc key
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape" && isOpen) {
-        setIsOpen(false);
-        hamburgerRef.current?.focus();
-      }
+      if (e.key === "Escape" && isOpen) close();
     }
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  // Body scroll lock
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  // Focus first link on open
+  useEffect(() => {
+    if (isOpen) firstLinkRef.current?.focus();
   }, [isOpen]);
 
   return (
@@ -36,7 +54,7 @@ export function Navigation() {
             alt="zvědomit"
             width={171}
             height={33}
-            className="h-[33px] w-auto"
+            className="h-[26px] w-auto md:h-[33px]"
           />
         </a>
 
@@ -65,55 +83,50 @@ export function Navigation() {
         {/* Mobile hamburger */}
         <button
           ref={hamburgerRef}
-          className="md:hidden flex flex-col justify-center items-center gap-[5px] w-10 h-10"
+          className="md:hidden p-2 text-foreground"
           aria-expanded={isOpen}
           aria-controls="mobile-menu"
-          aria-label={isOpen ? "Zavřít navigační menu" : "Otevřít navigační menu"}
+          aria-label={isOpen ? "Zavřít menu" : "Otevřít menu"}
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          <span
-            className={`block h-[2px] w-6 bg-foreground transition-transform duration-200 origin-center ${
-              isOpen ? "translate-y-[7px] rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`block h-[2px] w-6 bg-foreground transition-opacity duration-200 ${
-              isOpen ? "opacity-0" : ""
-            }`}
-          />
-          <span
-            className={`block h-[2px] w-6 bg-foreground transition-transform duration-200 origin-center ${
-              isOpen ? "-translate-y-[7px] -rotate-45" : ""
-            }`}
-          />
+          {isOpen ? (
+            <X size={24} />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src="/hamburger_menu_icon.svg" alt="" width={24} height={24} aria-hidden="true" />
+          )}
         </button>
       </div>
 
-      {/* Mobile dropdown */}
-      {isOpen && (
-        <div
-          id="mobile-menu"
-          className="md:hidden flex flex-col border-t border-surface px-[var(--px)] py-6 gap-5 bg-background"
-        >
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-base text-muted hover:text-foreground transition-colors duration-150"
-              onClick={() => setIsOpen(false)}
-            >
-              {link.label}
-            </a>
-          ))}
+      {/* Mobile fullscreen overlay */}
+      <div
+        id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigační menu"
+        className={`md:hidden fixed inset-0 z-40 bg-background flex flex-col items-center justify-center gap-10 transition-opacity duration-300 ${
+          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {navLinks.map((link, i) => (
           <a
-            href="#kontakt"
-            className="mt-2 inline-block self-start bg-foreground text-background text-base rounded-full px-10 py-3 hover:opacity-80 transition-opacity duration-150"
-            onClick={() => setIsOpen(false)}
+            key={link.href}
+            ref={i === 0 ? firstLinkRef : undefined}
+            href={link.href}
+            className="text-h3 font-medium text-foreground hover:text-muted transition-colors duration-150"
+            onClick={close}
           >
-            Pojďme začít
+            {link.label}
           </a>
-        </div>
-      )}
+        ))}
+        <a
+          href="#kontakt"
+          className="mt-4 bg-foreground text-background text-base rounded-full px-10 py-3 hover:opacity-80 transition-opacity duration-150"
+          onClick={close}
+        >
+          Pojďme začít
+        </a>
+      </div>
     </nav>
   );
 }
