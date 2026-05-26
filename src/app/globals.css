@@ -2,49 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* ── Colors (exact from Figma) ───────────────────────── */
-  --clr-bg: #ffffff;
-  --clr-dark: #000000;
-  --clr-text: #000000;
-  --clr-nav-text: #3c3c3c;
-  --clr-placeholder: #d9d9d9;
-  --clr-card-overlay: rgba(255, 255, 255, 0.72);
-
-  /* ── Typography (exact from Figma) ──────────────────── */
-  /* H1: Gabarito Medium 128px / line-height normal */
-  /* H2: Gabarito Medium 96px  / line-height 100%  */
-  /* Body/Regular: Gabarito Regular 18px            */
-  /* Label: Gabarito Regular 18px uppercase          */
-  /* Footer small: Roboto Regular 14px               */
-
-  /* ── Layout ──────────────────────────────────────────── */
-  /* 265px horizontal padding at 1920px = 13.8vw */
-  --px: clamp(1.25rem, 13.8vw, 16.5625rem);
-  --section-pt: 7.5625rem; /* 121px — where label sits */
-}
-
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-html,
-body,
-main {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background-color: var(--clr-bg);
-  color: var(--clr-text);
-  font-family: var(--font-gabarito), sans-serif;
-  -webkit-font-smoothing: antialiased;
 }

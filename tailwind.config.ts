@@ -7,12 +7,7 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {
-      fontFamily: {
-        gabarito: ["var(--font-gabarito)", "sans-serif"],
-        roboto: ["var(--font-roboto)", "sans-serif"],
-      },
-    },
+    extend: {},
   },
   plugins: [],
 };
