@@ -44,7 +44,7 @@ export function Navigation() {
 
   return (
     <nav aria-label="Hlavní navigace" className="sticky top-0 z-50 bg-background">
-      <div className="flex items-center justify-between px-[var(--px)] py-4">
+      <div className="flex items-center justify-between px-5 md:px-[var(--px)] py-4">
 
         {/* Logo */}
         <a href="/" aria-label="zvědomit – domů">
