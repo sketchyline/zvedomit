@@ -21,6 +21,7 @@ const config: Config = {
         gabarito: ["var(--font-gabarito)", "sans-serif"],
       },
       fontSize: {
+        "h1-mobile": ["4.75rem", { lineHeight: "3.75rem", fontWeight: "500" }],
         h1: ["8rem", { lineHeight: "6.875rem", fontWeight: "500" }],
         h2: ["6rem", { lineHeight: "1", fontWeight: "500" }],
         h3: ["2rem", { lineHeight: "1.2", fontWeight: "400" }],
@@ -29,6 +30,9 @@ const config: Config = {
       borderRadius: {
         card: "19px",
         image: "45px",
+      },
+      boxShadow: {
+        bubble: "0 4px 13px 0 rgba(0,0,0,0.1)",
       },
     },
   },
