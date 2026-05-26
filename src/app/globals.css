@@ -2,10 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-background: #ffffff;
+  --color-foreground: #000000;
+  --color-surface: #f5f5f5;
+  --color-accent-teal: #ebfffe;
+  --color-accent-green: #ebfff4;
+
+  /* horizontal page padding: 265px @ 1920px */
+  --px: clamp(1.25rem, 13.8vw, 16.5625rem);
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-gabarito), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

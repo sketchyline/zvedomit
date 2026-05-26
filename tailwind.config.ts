@@ -7,7 +7,29 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        background: "#FFFFFF",
+        foreground: "#000000",
+        surface: "#F5F5F5",
+        "accent-teal": "#EBFFFE",
+        "accent-green": "#EBFFF4",
+      },
+      fontFamily: {
+        sans: ["var(--font-gabarito)", "sans-serif"],
+        gabarito: ["var(--font-gabarito)", "sans-serif"],
+      },
+      fontSize: {
+        h1: ["8rem", { lineHeight: "6.875rem", fontWeight: "500" }],
+        h2: ["6rem", { lineHeight: "1", fontWeight: "500" }],
+        h3: ["2rem", { lineHeight: "1.2", fontWeight: "400" }],
+        body: ["1.125rem", { lineHeight: "1.5", fontWeight: "400" }],
+      },
+      borderRadius: {
+        card: "19px",
+        image: "45px",
+      },
+    },
   },
   plugins: [],
 };
