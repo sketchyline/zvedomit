@@ -38,30 +38,25 @@ export function Hero() {
         aria-hidden="true"
         src="/hero_background_logo.svg"
         alt=""
-        className="absolute hidden md:block left-1/2 -translate-x-1/2 top-[140px] w-[57%] pointer-events-none select-none"
+        className="absolute hidden md:block left-1/2 -translate-x-1/2 top-[clamp(60px,8vw,140px)] w-[57%] pointer-events-none select-none"
       />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         aria-hidden="true"
         src="/hero_background_logo.svg"
         alt=""
-        className="absolute md:hidden left-0 top-[200px] w-full pointer-events-none select-none"
+        className="absolute md:hidden left-0 top-[clamp(100px,12vw,200px)] w-full pointer-events-none select-none"
       />
 
       <div className="relative z-10 flex flex-col items-center pt-10 px-5 md:px-[var(--px)]">
 
         {/* Headline */}
-        <h1 className="font-medium text-foreground text-center w-full">
-          <span className="block md:hidden text-h1-mobile">
-            Máte to<br />v sobě
-          </span>
-          <span className="hidden md:block text-h1">
-            Máte to v sobě
-          </span>
+        <h1 className="font-medium text-foreground text-center text-h1 w-full">
+          Máte to<br className="md:hidden" /> v sobě
         </h1>
 
         {/* Photo container — relative so absolute bubbles position against it */}
-        <div className="relative mx-auto mt-6 w-full max-w-[386px] md:max-w-[658px]">
+        <div className="relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,580px)]">
           <Image
             src="/vojta_standing 1.png"
             alt="Vojtěch Majer, kouč zvědomit"
