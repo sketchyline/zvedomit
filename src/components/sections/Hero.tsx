@@ -81,21 +81,19 @@ export function Hero() {
           <p className="text-[13px] leading-snug text-left">{bubbles[1]}</p>
         </div>
 
-        {/* Bottom fade + blur */}
+        {/* Bottom fade — transparent → white, above all content */}
         <div
-          className="absolute left-0 right-0 pointer-events-none"
+          className="absolute left-0 right-0 bottom-0 z-30 pointer-events-none"
           style={{
-            top: "89.54%",
-            height: "10.46%",
+            height: "30%",
             background:
-              "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.27) 100%)",
-            backdropFilter: "blur(25px)",
+              "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
           }}
         />
       </section>
 
       {/* ─── DESKTOP (md and up) ─── */}
-      <section className="hidden md:block relative overflow-x-hidden bg-background min-h-screen">
+      <section className="hidden md:block relative overflow-hidden bg-background min-h-screen">
         {/* Background blobs */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -153,6 +151,15 @@ export function Hero() {
             ))}
           </div>
         </div>
+
+        {/* Bottom fade — transparent → white */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
+          }}
+        />
       </section>
     </>
   );
