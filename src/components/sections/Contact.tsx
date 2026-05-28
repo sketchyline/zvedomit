@@ -43,7 +43,7 @@ export function Contact() {
         <div className="hidden lg:flex lg:gap-24">
 
           {/* Left: label + heading + body */}
-          <div className="flex-1 max-w-[500px]">
+          <div className="flex-1 max-w-[408px]">
             <p className="text-[15px] uppercase tracking-[0.15em] font-normal text-foreground mb-4">
               KONTAKT
             </p>
