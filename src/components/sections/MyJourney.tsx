@@ -44,7 +44,7 @@ function TimelineItem({ item }: { item: TimelineItemData }) {
   const numColor = item.color === "teal" ? "text-accent-teal" : "text-accent-green";
 
   return (
-    <div className="max-w-[27rem]">
+    <div className="w-full lg:max-w-[27rem]">
       {/* Icon — centrovaná nad odstavcem */}
       <div className="flex justify-center mb-3 lg:mb-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -97,22 +97,22 @@ export function MyJourney() {
         </h2>
 
         {/* Quote block — avatar fixed-width left, text column right with quotes at its edges */}
-        <blockquote className="flex items-center gap-8 lg:gap-[5rem] mb-16 lg:mb-24">
+        <blockquote className="flex flex-col lg:flex-row lg:items-center lg:gap-[5rem] mb-16 lg:mb-24">
           <Image
             src="/story_pic.png"
             alt="Vojtěch Majer"
             width={202}
             height={202}
-            className="rounded-full w-20 h-20 lg:w-[202px] lg:h-[202px] object-cover flex-shrink-0"
+            className="rounded-full w-[140px] h-[140px] lg:w-[202px] lg:h-[202px] object-cover mx-auto lg:mx-0 mb-6 lg:mb-0 flex-shrink-0"
           />
-          <div className="flex-1 max-w-[52rem]">
+          <div className="lg:flex-1 lg:max-w-[52rem]">
             <span
               className="block text-[4rem] lg:text-[6rem] font-extrabold leading-none mb-3 lg:mb-4 text-foreground"
               aria-hidden="true"
             >
               &ldquo;
             </span>
-            <p className="text-h3 font-normal text-foreground leading-snug">
+            <p className="text-h3 font-normal text-foreground leading-snug text-center lg:text-left">
               Strávil jsem desítky hodin v koučování a terapii, které mi pomohly najít udržitelnou cestu v práci i k sobě samému. Výcvik a následná práce s klienty pak ještě víc proměnily způsob, jakým přemýšlím o sobě, vztazích i životě obecně.
             </p>
             <span
@@ -126,8 +126,6 @@ export function MyJourney() {
 
         {/* Timeline */}
         <div className="relative">
-          {/* Mobile left border line */}
-          <div className="lg:hidden absolute left-4 top-0 bottom-0 w-px bg-foreground/20" />
           {/* Desktop center line SVG */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -138,7 +136,7 @@ export function MyJourney() {
           />
 
           <ol
-            className="flex flex-col gap-12 pl-10 lg:pl-0 lg:grid lg:grid-cols-2 lg:gap-x-16 lg:gap-y-12"
+            className="flex flex-col gap-12 lg:grid lg:grid-cols-2 lg:gap-x-16 lg:gap-y-12"
             aria-label="Časová osa osobní cesty"
           >
             {timelineItems.map((item, i) => {
