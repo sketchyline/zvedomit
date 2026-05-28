@@ -60,7 +60,7 @@ function TestimonialCard({ quote, author, role, isActive }: TestimonialCardProps
       />
 
       {/* Text — bounded above by quote top (52/98px) and below by author area */}
-      <p className="absolute top-[52px] bottom-[42px] left-[22px] right-[22px] lg:top-[98px] lg:bottom-[73px] lg:left-[40px] lg:right-[40px] text-[13px] lg:text-body leading-relaxed text-foreground overflow-hidden">
+      <p className="absolute top-[52px] bottom-[42px] left-[22px] right-[22px] lg:top-[98px] lg:bottom-[73px] lg:left-[40px] lg:right-[40px] text-[13px] lg:text-body text-foreground overflow-hidden">
         {quote}
       </p>
 
