@@ -38,7 +38,7 @@ export function Footer() {
           aria-hidden="true"
           src="/footer_background_logo_mobile.svg"
           alt=""
-          className="lg:hidden absolute top-0 left-1/2 -translate-x-1/2 w-full pointer-events-none select-none"
+          className="lg:hidden absolute top-0 left-1/2 -translate-x-1/2 h-full w-auto pointer-events-none select-none"
         />
         <div className="relative z-10 max-w-[642px] mx-auto">
           <Image
