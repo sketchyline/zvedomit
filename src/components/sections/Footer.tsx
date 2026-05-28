@@ -25,7 +25,7 @@ export function Footer() {
   return (
     <footer>
       {/* Photo + watermark area */}
-      <div className="relative bg-accent-teal overflow-hidden">
+      <div className="relative bg-white overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           aria-hidden="true"
