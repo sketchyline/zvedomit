@@ -11,7 +11,7 @@ const navLinks = [
 function FooterLogo({ className }: { className?: string }) {
   return (
     <Image
-      src="/Footer Logo.svg"
+      src="/footer-logo.svg"
       alt="Zvědomit"
       width={271}
       height={52}
