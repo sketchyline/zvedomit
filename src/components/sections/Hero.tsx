@@ -154,8 +154,9 @@ export function Hero() {
 
         {/* Bottom fade — transparent → white */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
+          className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none"
           style={{
+            height: "clamp(120px, 18vw, 280px)",
             background:
               "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)",
           }}
