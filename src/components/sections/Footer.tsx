@@ -31,7 +31,14 @@ export function Footer() {
           aria-hidden="true"
           src="/background_logo.svg"
           alt=""
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[992px] max-w-none pointer-events-none select-none"
+          className="hidden lg:block absolute top-0 left-1/2 -translate-x-1/2 w-[992px] max-w-none pointer-events-none select-none"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          aria-hidden="true"
+          src="/footer_background_logo_mobile.svg"
+          alt=""
+          className="lg:hidden absolute top-0 left-1/2 -translate-x-1/2 w-full pointer-events-none select-none"
         />
         <div className="relative z-10 max-w-[642px] mx-auto">
           <Image
