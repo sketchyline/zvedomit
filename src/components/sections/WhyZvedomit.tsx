@@ -45,7 +45,7 @@ export function WhyZvedomit() {
   return (
     <section id="proc-koucovani" className="bg-background py-20 lg:py-28">
       <div className="px-5 lg:px-[var(--px)]">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-start">
+        <div className="lg:grid lg:grid-cols-[3fr_2fr] lg:gap-12 lg:items-start">
 
           {/* Left column: eyebrow + heading + photo */}
           <div>
@@ -67,10 +67,21 @@ export function WhyZvedomit() {
           </div>
 
           {/* Right column: 3 feature cards */}
-          <div className="flex flex-col gap-4 lg:gap-5 mt-10 lg:mt-0">
-            {featureCards.map((card) => (
-              <FeatureCard key={card.icon} {...card} />
-            ))}
+          <div className="mt-10 lg:mt-0">
+            {/* Mobile: horizontal swipe */}
+            <div className="lg:hidden -mx-5 px-5 scroll-pl-5 flex gap-4 overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden">
+              {featureCards.map((card) => (
+                <div key={card.icon} className="snap-start shrink-0 w-[80vw]">
+                  <FeatureCard {...card} />
+                </div>
+              ))}
+            </div>
+            {/* Desktop: vertical stack */}
+            <div className="hidden lg:flex flex-col gap-5">
+              {featureCards.map((card) => (
+                <FeatureCard key={card.icon} {...card} />
+              ))}
+            </div>
           </div>
 
         </div>

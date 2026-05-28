@@ -23,7 +23,7 @@ const config: Config = {
       fontSize: {
         "h1-mobile": ["4.75rem", { lineHeight: "3.75rem", fontWeight: "500" }],
         h1: ["clamp(2.5rem, 5.5vw, 6.5rem)", { lineHeight: "0.9", fontWeight: "500" }],
-        h2: ["clamp(2.5rem, 6vw, 6rem)", { lineHeight: "1", fontWeight: "500" }],
+        h2: ["clamp(2.5rem, 5.5vw, 6rem)", { lineHeight: "1", fontWeight: "500" }],
         h3: ["clamp(1.5rem, 3vw, 2rem)", { lineHeight: "1.2", fontWeight: "400" }],
         body: ["1.125rem", { lineHeight: "1.5", fontWeight: "400" }],
       },
