@@ -43,14 +43,14 @@ export function Contact() {
         <div className="hidden lg:flex lg:gap-24">
 
           {/* Left: label + heading + body */}
-          <div className="flex-1 max-w-[408px]">
+          <div className="flex-1">
             <p className="text-[15px] uppercase tracking-[0.15em] font-normal text-foreground mb-4">
               KONTAKT
             </p>
             <h2 className="text-h2 font-medium text-foreground leading-none mb-10">
               Pojďme<br />si promluvit
             </h2>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 max-w-[408px]">
               {paragraphs.map((text, i) => (
                 <p key={i} className="text-body text-foreground">{text}</p>
               ))}
