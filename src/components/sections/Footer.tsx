@@ -99,7 +99,7 @@ export function Footer() {
           </div>
 
           {/* Tagline */}
-          <p className="mt-[180px] text-white text-[5rem] font-normal leading-tight">
+          <p className="mt-12 text-white text-[clamp(2.5rem,3.5vw,5rem)] font-normal leading-tight">
             Nejlepší rada je totiž ta, kterou si dáte sami.
           </p>
 
