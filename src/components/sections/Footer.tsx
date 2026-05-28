@@ -33,14 +33,19 @@ export function Footer() {
           alt=""
           className="hidden lg:block absolute top-0 left-1/2 -translate-x-1/2 w-[992px] max-w-none pointer-events-none select-none"
         />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <svg
           aria-hidden="true"
-          src="/footer_background_logo_mobile.svg"
-          alt=""
+          viewBox="0 0 381 293"
+          xmlns="http://www.w3.org/2000/svg"
           className="lg:hidden absolute top-0 left-0 w-full h-auto pointer-events-none select-none"
-        />
-        <div className="relative z-10 max-w-[642px] lg:mx-auto mr-[26px] lg:mr-auto">
+        >
+          <path
+            d="M150.863 289.274L54.1712 201.394C51.889 199.23 48.0454 200.913 48.0454 204.038V231.448C48.0454 236.497 43.9615 240.585 38.9168 240.585H9.12863C4.08386 240.585 0 236.497 0 231.448V108.104C0 100.169 9.48897 95.9616 15.3745 101.251L154.226 227.241C156.388 229.284 159.871 229.044 161.793 226.88L365.025 3.03233C370.67 -3.21905 381 0.868393 381 9.1635V148.617C381 153.667 376.916 157.754 371.871 157.754H342.203C337.159 157.754 333.075 153.667 333.075 148.617V120.847C333.075 117 328.27 115.076 325.748 117.962L171.162 288.312C165.877 294.203 156.748 294.563 150.983 289.274H150.863Z"
+            fill="black"
+            fillOpacity={0.18}
+          />
+        </svg>
+        <div className="relative z-10 max-w-[642px] mx-auto">
           <Image
             src="/footer_vojta 1.png"
             alt="Vojtěch Majer"
