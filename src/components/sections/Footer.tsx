@@ -25,7 +25,7 @@ export function Footer() {
   return (
     <footer>
       {/* Photo + watermark area */}
-      <div className="relative bg-background overflow-hidden">
+      <div className="relative bg-accent-teal overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           aria-hidden="true"
@@ -38,7 +38,7 @@ export function Footer() {
           aria-hidden="true"
           src="/footer_background_logo_mobile.svg"
           alt=""
-          className="lg:hidden absolute top-0 left-1/2 -translate-x-1/2 h-full w-auto pointer-events-none select-none"
+          className="lg:hidden absolute top-0 left-1/2 -translate-x-1/2 w-[160vw] max-w-none pointer-events-none select-none"
         />
         <div className="relative z-10 max-w-[642px] mx-auto">
           <Image
