@@ -38,9 +38,9 @@ export function Footer() {
           aria-hidden="true"
           src="/footer_background_logo_mobile.svg"
           alt=""
-          className="lg:hidden absolute inset-0 w-full h-full object-cover z-20 pointer-events-none select-none"
+          className="lg:hidden absolute top-0 left-0 w-full h-auto pointer-events-none select-none"
         />
-        <div className="relative z-10 max-w-[642px] mx-auto">
+        <div className="relative z-10 max-w-[642px] lg:mx-auto mr-[26px] lg:mr-auto">
           <Image
             src="/footer_vojta 1.png"
             alt="Vojtěch Majer"
