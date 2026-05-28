@@ -4,101 +4,134 @@
 
 - **Framework:** Next.js 14 (App Router)
 - **Jazyk:** TypeScript
-- **Stylování:** Inline styles (vw-based pixel-perfect positioning)
-- **Fonty:** Gabarito (hlavní), Roboto (drobný text)
-- **Zdroj designu:** Figma (canvas 1920×1080, file key: `3rTnaq8VYCr8IBp0RRNPVa`)
+- **Stylování:** Tailwind CSS v3 (JIT), arbitrary values pro pixel-perfect spacing
+- **Fonty:** Gabarito (hlavní, Google Fonts), Roboto (drobný text — copyright, podmínky)
+- **Ikony:** Lucide React (Phone, Mail, ChevronLeft, ChevronRight)
+- **Zdroj designu:** Figma (file key: `3rTnaq8VYCr8IBp0RRNPVa`)
+- **Deploy:** Vercel (zvedomit.vercel.app)
+- **Repozitář:** https://github.com/sketchyline/zvedomit, branch `main`
 
 ## Struktura projektu
 
 ```
 src/
   app/
-    layout.tsx         — root layout, CSS proměnné, načítání fontů
-    page.tsx           — hlavní stránka (skládá sekce)
-    globals.css        — globální styly a CSS custom properties
+    layout.tsx          — root layout, načítání fontů, CSS proměnné
+    page.tsx            — hlavní stránka (skládá sekce)
+    globals.css         — CSS custom properties (--px, --font-*)
   components/
-    Navbar.tsx         — fixní navigace s frosted-glass efektem po scrollu
-    Hero.tsx           — fullscreen úvodní sekce s portrétem
-    WhyCoaching.tsx    — sekce "Proč koučování"
-    MyStory.tsx        — sekce "Moje cesta" (3 story bloky)
-    Testimonials.tsx   — reference klientů (infinity carousel)
-    Contact.tsx        — kontaktní sekce
-    Footer.tsx         — patička (černá karta)
-  components/ui/
-    Button.tsx         — sdílená komponenta tlačítka
+    sections/
+      Navigation.tsx    — fixní navigace s blur efektem po scrollu
+      Hero.tsx          — úvodní sekce, desktop + mobile layout
+      WhyZvedomit.tsx   — sekce "Proč koučování"
+      MyJourney.tsx     — sekce "Osobní příběh"
+      Testimonials.tsx  — reference klientů (3-card peek carousel)
+      Contact.tsx       — kontaktní sekce
+      Footer.tsx        — patička (foto + tmavá karta)
 public/
-  Nav Logo.svg                       — logo v navigaci
-  Hero Portrait.png                  — portrét na Hero sekci
-  Background Letter (velké _M_).svg  — pozadí Hero sekce
-  hero-bg.png                        — gradientní pozadí Hero
-  footer-logo.png                    — bílé logo v patičce
-  stars.png                          — ikona hvězdiček (testimonials)
-  arrow-left.png                     — šipka vlevo (carousel)
-  arrow-right.png                    — šipka vpravo (carousel)
-  btn-circle.png                     — pozadí tlačítka carousel (vlevo)
-  btn-right.png                      — pozadí tlačítka carousel (vpravo)
+  nav_logo.svg                      — logo v navigaci
+  footer-logo.svg                   — bílé logo v patičce (bez mezer v názvu!)
+  footer_vojta 1.png                — portrét Vojty (průhledné pozadí)
+  background_logo.svg               — watermark logo za fotkou (desktop footer)
+  footer_background_logo_mobile.svg — watermark logo za fotkou (mobil footer)
+  stars.svg                         — hvězdičky v referencích
+  whatsapp_icon.svg                 — WhatsApp ikona v kontaktu
 ```
 
-## Pozicování
+## Design tokeny (tailwind.config.ts)
 
-Všechny sekce používají `position: absolute` s hodnotami v `vw`:
+| Token          | Hodnota   | Použití                    |
+|----------------|-----------|----------------------------|
+| `background`   | `#FFFFFF` | Pozadí stránek             |
+| `foreground`   | `#000000` | Text, tmavé plochy         |
+| `surface`      | `#F5F5F5` | Světlé karty               |
+| `accent-teal`  | `#EBFFFE` | (zatím nepoužito)          |
+| `accent-green` | `#EBFFF4` | (zatím nepoužito)          |
+| `accent-gold`  | `#EAB843` | Akcenty                    |
+| `muted`        | `#3C3C3C` | Tlumený text               |
 
+## CSS proměnné (globals.css)
+
+```css
+--px: clamp(1.25rem, 13.8vw, 16.5625rem)  /* horizontální okraj stránek */
 ```
-horizontálně: px / 1920 * 100  → vw
-vertikálně:   px / 1080 * 100  → vw  (nebo % pro Hero s height: 100vh)
+
+Používá se jako `px-[var(--px)]` v sekcích.
+
+## Typography (tailwind.config.ts)
+
+| Třída          | Velikost                          |
+|----------------|-----------------------------------|
+| `text-h1`      | `clamp(2.5rem, 5.5vw, 6.5rem)`    |
+| `text-h2`      | `clamp(2.5rem, 5.5vw, 6rem)`      |
+| `text-h3`      | `clamp(1.5rem, 3vw, 2rem)`        |
+| `text-body`    | `1.125rem`                        |
+
+## Sekce
+
+| Sekce         | Figma node (desktop) | Figma node (mobil) |
+|---------------|----------------------|--------------------|
+| Navigation    | —                    | —                  |
+| Hero          | —                    | —                  |
+| WhyZvedomit   | `153-27`             | —                  |
+| MyJourney     | —                    | —                  |
+| Testimonials  | —                    | —                  |
+| Contact       | `153-29`             | `153-42`           |
+| Footer        | `153-31`             | `153-44`           |
+
+## Klíčové implementační detaily
+
+### Responsive přístup
+Každá sekce má **dvě verze layoutu** — mobile (`lg:hidden`) a desktop (`hidden lg:...`). Breakpoint je `lg` = 1024px.
+
+### Testimonials — 3-card peek carousel
+- State: `activeIndex` (1 = střed), vizualizuje `[prev, active, next]`
+- Mobile: `overflow-hidden -mx-5` s `justify-center` — boční karty vyčnívají
+- Desktop: `items-stretch` na flex řadě — všechny karty stejná výška
+- Inactive overlay: `bg-white/[0.72]` přes neaktivní karty
+
+### Footer — struktura
+```
+<footer>
+  <div bg-white overflow-hidden>         ← foto oblast
+    background_logo.svg (desktop)        ← absolute, w-[992px]
+    <svg inline> (mobile)                ← absolute, w-full, fillOpacity 0.18
+    <Image foto Vojty>                   ← z-10, max-w-[642px] mx-auto
+  </div>
+  <div mx-[14px] mb-[14px]              ← tmavá karta
+       lg:mx-[37px] lg:mb-[37px]>       ← bez horního marginu (foto přisazena)
+    mobile layout
+    desktop layout
+  </div>
+</footer>
 ```
 
-CSS proměnná `--px` = `clamp(1.25rem, 13.8vw, 16.5625rem)` — levý/pravý okraj stránek.
+- **Footer logo soubor:** `/public/footer-logo.svg` (bez mezer — Vercel/Linux je case-sensitive)
+- **Foto:** `footer_vojta 1.png` má průhledné pozadí, kontejner `bg-white`
+- **Mobile watermark logo:** inline SVG (ne `<img>`), `fillOpacity={0.18}` — soubor s 10% opacity je na bílém pozadí neviditelný
 
-## Sekce a jejich výšky
+### Vercel / Linux gotchas
+- Mezery v názvech souborů způsobují 404 na Vercelu (macOS je case-insensitive, Linux ne)
+- Řešení: `footer-logo.svg` místo `Footer Logo.svg`
+- `next/image` s SVG: nutný prop `unoptimized`
 
-| Sekce         | Výška                              | Figma node  |
-|---------------|------------------------------------|-------------|
-| Hero          | `100vh` (min 600px)                | `19:375`    |
-| WhyCoaching   | `clamp(40rem, 61.15vw, 1174px)`    | `19:416`    |
-| MyStory       | `clamp(60rem, 109.01vw, 2093px)`   | `23:431`    |
-| Testimonials  | `clamp(35rem, 60.1vw, 1154px)`     | `23:483`    |
-| Contact       | `clamp(30rem, 51.094vw, 981px)`    | `23:503`    |
-| Footer        | `clamp(20rem, 34.688vw, 666px)`    | `34:52`     |
-
-## Klíčové poznámky
-
-- **`"use client"`** je nutné pro komponenty s `onMouseOver`/`onMouseOut` nebo `useState` — platí pro: Navbar, Testimonials, Contact, Footer.
-- **Infinity carousel** (Testimonials): `offset` state rotuje data přes 3 pevné poziční sloty. Index 1 z `visible` pole je vždy aktivní (střední) karta.
-- **Figma MCP URL** expirují za 7 dní — všechny assety jsou stažené do `/public` a používají se lokální cesty.
-- **`calc()` s násobením** (`calc(n * Xvw)`) způsobuje problémy v Chrome — používat předpočítané hodnoty jako plain `vw` string.
-- **Hero portrait**: `bottom: 0; height: 65.19vh; left: 50%; transform: translateX(-50%)` — kotven ke spodnímu okraji sekce, section `overflow: hidden` ořízne spodní okraj.
-- **Footer tagline**: `whiteSpace: nowrap` + `left: 50%; transform: translateX(-50%)` — nutné pro zobrazení na jednom řádku.
-- **Footer bottom links**: zabaleny do flex divu s `gap: 24` pozicovaného od pravého okraje — zabraňuje překrývání při menších viewportech.
+### Contact — ikony
+- Telefon, Email: Lucide React ikony
+- WhatsApp: vlastní `/public/whatsapp_icon.svg` (ne Lucide `MessageCircle`)
 
 ## Navigace (navLinks)
 
-| Label           | href            |
-|-----------------|-----------------|
-| Proč koučování  | `#why-coaching` |
-| Moje cesta      | `#my-story`     |
-| Kontakt         | `#contact`      |
-| Reference       | `#testimonials` |
+| Label           | href               |
+|-----------------|--------------------|
+| Úvod            | `#`                |
+| Proč koučování  | `#proc-koucovani`  |
+| Osobní příběh   | `#osobni-pribeh`   |
+| Reference       | `#reference`       |
+| Kontakt         | `#kontakt`         |
 
 ## Kontaktní informace (obsah webu)
 
 - Kouč: **Vojtěch Majer**
 - Tel: +420 737 649 994
-- Email: majer.vojta@gmail.com
+- Email: vojtech.majer@zvedomit.cz
 - WhatsApp: wa.me/420737649994
-
-## Barvy
-
-| Token        | Hodnota   |
-|--------------|-----------|
-| Pozadí       | `#ffffff` |
-| Text         | `#000000` |
-| Navbar text  | `#3c3c3c` |
-| Footer karta | `#000000` |
-| CTA button   | `#000000` |
-
-## Git
-
-- Repozitář: https://github.com/sketchyline/zvedomit
-- Branch: `main`
-- `.gitignore` vylučuje: `node_modules`, `.next`, `.DS_Store`, `.env*`, `next-env.d.ts`, `*.tsbuildinfo`
