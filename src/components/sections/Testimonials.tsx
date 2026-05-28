@@ -95,12 +95,12 @@ export function Testimonials() {
   ];
 
   return (
-    <section id="reference" className="bg-background py-16 md:py-24 lg:py-32 overflow-hidden">
+    <section id="reference" className="bg-accent-teal lg:bg-background py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="px-5 lg:px-[var(--px)]">
 
         {/* Header */}
         <div className="flex items-end justify-between mb-7 lg:mb-[60px]">
-          <div className="text-center lg:text-left w-full lg:w-auto">
+          <div className="text-left w-full lg:w-auto">
             <p className="text-[13px] lg:text-[15px] uppercase tracking-[0.15em] font-normal text-foreground mb-3 lg:mb-4">
               REFERENCE
             </p>
@@ -137,14 +137,20 @@ export function Testimonials() {
           ))}
         </div>
 
-        {/* Mobile: 1 active card + arrows below */}
-        <div className="lg:hidden flex flex-col items-center">
-          <TestimonialCard
-            key={activeIndex}
-            {...testimonials[activeIndex]}
-            isActive={true}
-          />
-          <div className="flex gap-3 mt-6">
+        {/* Mobile: 3-card peek carousel */}
+        <div className="lg:hidden">
+          <div className="overflow-hidden -mx-5">
+            <div className="flex gap-3 justify-center">
+              {visibleIndices.map((idx, position) => (
+                <TestimonialCard
+                  key={`${idx}-${position}`}
+                  {...testimonials[idx]}
+                  isActive={position === 1}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="flex gap-3 mt-6 justify-center">
             <button
               onClick={prev}
               aria-label="Předchozí recenze"
