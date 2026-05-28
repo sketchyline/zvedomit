@@ -83,18 +83,14 @@ export function Navigation() {
         {/* Mobile hamburger */}
         <button
           ref={hamburgerRef}
-          className="md:hidden p-2 text-foreground"
+          className={`md:hidden p-2 text-foreground transition-opacity duration-300 ${isOpen ? "opacity-0 pointer-events-none" : "opacity-100"}`}
           aria-expanded={isOpen}
           aria-controls="mobile-menu"
           aria-label={isOpen ? "Zavřít menu" : "Otevřít menu"}
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          {isOpen ? (
-            <X size={24} />
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src="/hamburger_menu_icon.svg" alt="" width={24} height={24} aria-hidden="true" />
-          )}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/hamburger_menu_icon.svg" alt="" width={24} height={24} aria-hidden="true" />
         </button>
       </div>
 
@@ -108,6 +104,13 @@ export function Navigation() {
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
+        <button
+          onClick={close}
+          aria-label="Zavřít menu"
+          className="absolute top-4 right-5 p-2 text-foreground"
+        >
+          <X size={24} />
+        </button>
         {navLinks.map((link, i) => (
           <a
             key={link.href}
