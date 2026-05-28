@@ -8,12 +8,24 @@ const navLinks = [
   { label: "Kontakt", href: "#kontakt", bold: false },
 ];
 
+function FooterLogo({ className }: { className?: string }) {
+  return (
+    <Image
+      src="/Footer Logo.svg"
+      alt="Zvědomit"
+      width={271}
+      height={52}
+      className={className}
+      unoptimized
+    />
+  );
+}
+
 export function Footer() {
   return (
     <footer>
       {/* Photo + watermark area */}
       <div className="relative bg-background overflow-hidden">
-        {/* Background watermark — built-in fill-opacity 0.1 */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           aria-hidden="true"
@@ -21,7 +33,6 @@ export function Footer() {
           alt=""
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[992px] max-w-none pointer-events-none select-none"
         />
-        {/* Vojta photo — centered, max 642px on desktop */}
         <div className="relative z-10 max-w-[642px] mx-auto">
           <Image
             src="/footer_vojta 1.png"
@@ -33,13 +44,12 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Dark section */}
-      <div className="relative z-10 -mt-2 bg-foreground mx-[5px] rounded-[24px] lg:mx-0 lg:rounded-none lg:rounded-t-[45px]">
+      {/* Dark section — 37px margin on all sides */}
+      <div className="m-[37px] bg-foreground rounded-[24px] lg:rounded-[45px]">
 
         {/* ── Mobile layout ── */}
         <div className="lg:hidden px-5 pt-[41px] pb-10">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/Footer Logo.svg" alt="Zvědomit" className="h-[52px] w-auto" />
+          <FooterLogo className="h-[52px] w-auto" />
 
           <nav className="mt-14 flex flex-col gap-5">
             {navLinks.map(({ label, href, bold }) => (
@@ -74,10 +84,8 @@ export function Footer() {
 
         {/* ── Desktop layout ── */}
         <div className="hidden lg:flex lg:flex-col px-[var(--px)] pt-[66px] pb-[37px]">
-          {/* Top row: Logo left, Nav + Social right */}
           <div className="flex items-start justify-between">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/Footer Logo.svg" alt="Zvědomit" className="h-[52px] w-auto" />
+            <FooterLogo className="h-[52px] w-auto" />
             <div className="flex gap-20 items-start">
               <nav className="flex flex-col gap-5">
                 {navLinks.map(({ label, href, bold }) => (
@@ -98,12 +106,10 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Tagline */}
           <p className="mt-12 text-white text-[clamp(2.5rem,3.5vw,5rem)] font-normal leading-tight">
             Nejlepší rada je totiž ta, kterou si dáte sami.
           </p>
 
-          {/* Bottom bar */}
           <div className="mt-[130px] flex items-center justify-between">
             <p className="text-[14px] text-white">© 2026 Zvědomit. Všechna práva vyhrazena.</p>
             <div className="flex gap-4">
