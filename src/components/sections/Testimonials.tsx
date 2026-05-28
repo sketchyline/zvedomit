@@ -95,7 +95,7 @@ export function Testimonials() {
   ];
 
   return (
-    <section id="reference" className="bg-accent-teal lg:bg-background py-16 md:py-24 lg:py-32 overflow-hidden">
+    <section id="reference" className="bg-background py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="px-5 lg:px-[var(--px)]">
 
         {/* Header */}
