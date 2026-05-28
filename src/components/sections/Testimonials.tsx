@@ -59,20 +59,20 @@ function TestimonialCard({ quote, author, role, isActive }: TestimonialCardProps
         className="absolute top-[26px] left-[130px] w-[74px] lg:top-[57px] lg:left-[230px] lg:w-[130px] h-auto pointer-events-none"
       />
 
-      {/* Text content: starts exactly where Figma says (top=52 mobile, top=98 desktop) */}
-      <div className="absolute inset-0 flex flex-col pt-[52px] pb-[18px] px-[22px] lg:pt-[98px] lg:pb-[30px] lg:px-[40px]">
-        <p className="text-[13px] lg:text-body leading-relaxed text-foreground flex-1">
-          {quote}
-        </p>
-        <cite className="not-italic flex-shrink-0">
-          <span className="block font-bold text-[13px] lg:text-base text-foreground">
-            {author}
-          </span>
-          <span className="block font-normal text-[13px] lg:text-base text-foreground/60">
-            {role}
-          </span>
-        </cite>
-      </div>
+      {/* Text — bounded above by quote top (52/98px) and below by author area */}
+      <p className="absolute top-[52px] bottom-[42px] left-[22px] right-[22px] lg:top-[98px] lg:bottom-[73px] lg:left-[40px] lg:right-[40px] text-[13px] lg:text-body leading-relaxed text-foreground overflow-hidden">
+        {quote}
+      </p>
+
+      {/* Author — anchored to card bottom per Figma */}
+      <cite className="absolute bottom-[18px] left-[22px] lg:bottom-[30px] lg:left-[39px] not-italic">
+        <span className="block font-bold text-[13px] lg:text-base text-foreground">
+          {author}
+        </span>
+        <span className="block font-normal text-[13px] lg:text-base text-foreground/60">
+          {role}
+        </span>
+      </cite>
 
       {/* Inactive overlay — rgba(255,255,255,0.72) per Figma */}
       {!isActive && (
