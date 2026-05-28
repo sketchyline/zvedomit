@@ -92,7 +92,7 @@ export function MyJourney() {
         </p>
 
         {/* Heading */}
-        <h2 className="text-h2 font-medium text-foreground text-center leading-tight mb-10 lg:mb-14">
+        <h2 className="text-[3rem] lg:text-h2 font-medium text-foreground text-center leading-tight mb-10 lg:mb-14">
           Moje cesta
         </h2>
 
@@ -103,11 +103,11 @@ export function MyJourney() {
             alt="Vojtěch Majer"
             width={202}
             height={202}
-            className="rounded-full w-[140px] h-[140px] lg:w-[202px] lg:h-[202px] object-cover mx-auto lg:mx-0 mb-6 lg:mb-0 flex-shrink-0"
+            className="rounded-full w-[140px] h-[140px] lg:w-[202px] lg:h-[202px] object-cover mx-auto lg:mx-0 mb-3 lg:mb-0 flex-shrink-0"
           />
           <div className="lg:flex-1 lg:max-w-[52rem]">
             <span
-              className="block text-[4rem] lg:text-[6rem] font-extrabold leading-none mb-3 lg:mb-4 text-foreground"
+              className="block text-[4rem] lg:text-[6rem] font-extrabold leading-none mb-1 lg:mb-4 text-foreground"
               aria-hidden="true"
             >
               &ldquo;
