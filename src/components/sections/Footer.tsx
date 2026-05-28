@@ -44,8 +44,8 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Dark section — 37px margin on all sides */}
-      <div className="m-[37px] bg-foreground rounded-[24px] lg:rounded-[45px]">
+      {/* Dark section — bez horního marginu (fotka přisazená), boky + spodek: 14px mobil / 37px desktop */}
+      <div className="mx-[14px] mb-[14px] lg:mx-[37px] lg:mb-[37px] bg-foreground rounded-[24px] lg:rounded-[45px]">
 
         {/* ── Mobile layout ── */}
         <div className="lg:hidden px-5 pt-[41px] pb-10">
