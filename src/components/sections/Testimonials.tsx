@@ -35,36 +35,36 @@ const testimonials = [
   },
 ];
 
-function TestimonialCard({ quote, author, role, rating, isActive }: TestimonialCardProps) {
+function TestimonialCard({ quote, author, role, isActive }: TestimonialCardProps) {
   return (
-    <div className="relative w-[225px] lg:w-[397px]">
-      <blockquote className="min-h-[395px] lg:h-full lg:min-h-[482px] bg-white border border-foreground rounded-[24px] lg:rounded-image px-[22px] lg:px-10 pt-0 pb-[18px] lg:pb-[30px] flex flex-col">
+    <div className="relative flex-shrink-0 w-[225px] h-[395px] lg:w-[397px] lg:h-[482px]">
+      {/* Card background + border */}
+      <div className="absolute inset-0 bg-white border border-foreground rounded-[24px] lg:rounded-image" />
 
-        {/* Quote mark + stars */}
-        <div className="flex items-start justify-between">
-          <span
-            className="text-[4rem] lg:text-[8rem] font-bold leading-[0.69] lg:leading-[0.61] text-foreground select-none"
-            aria-hidden="true"
-          >
-            &ldquo;
-          </span>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/stars.svg"
-            alt=""
-            role="img"
-            aria-label={`Hodnocení ${rating} z 5`}
-            className="w-[73px] lg:w-[130px] h-auto mt-[1.6rem] lg:mt-[3.5rem] flex-shrink-0"
-          />
-        </div>
+      {/* Decorative quote mark — precise Figma position */}
+      <span
+        className="absolute top-0 left-[22px] lg:left-[39px] text-[4rem] lg:text-[8rem] font-bold leading-none text-foreground select-none pointer-events-none"
+        aria-hidden="true"
+      >
+        &ldquo;
+      </span>
 
-        {/* Review text */}
-        <p className="text-[13px] lg:text-body leading-relaxed text-foreground flex-1 mt-3 lg:mt-5">
+      {/* Stars — precise Figma position */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/stars.svg"
+        alt=""
+        role="img"
+        aria-label="Hodnocení 5 z 5"
+        className="absolute top-[26px] left-[130px] w-[74px] lg:top-[57px] lg:left-[230px] lg:w-[130px] h-auto pointer-events-none"
+      />
+
+      {/* Text content: starts exactly where Figma says (top=52 mobile, top=98 desktop) */}
+      <div className="absolute inset-0 flex flex-col pt-[52px] pb-[18px] px-[22px] lg:pt-[98px] lg:pb-[30px] lg:px-[40px]">
+        <p className="text-[13px] lg:text-body leading-relaxed text-foreground flex-1">
           {quote}
         </p>
-
-        {/* Author */}
-        <cite className="not-italic mt-4 lg:mt-6 block flex-shrink-0">
+        <cite className="not-italic flex-shrink-0">
           <span className="block font-bold text-[13px] lg:text-base text-foreground">
             {author}
           </span>
@@ -72,10 +72,11 @@ function TestimonialCard({ quote, author, role, rating, isActive }: TestimonialC
             {role}
           </span>
         </cite>
-      </blockquote>
+      </div>
 
+      {/* Inactive overlay — rgba(255,255,255,0.72) per Figma */}
       {!isActive && (
-        <div className="absolute inset-0 rounded-[24px] lg:rounded-image pointer-events-none bg-white/[0.72]" />
+        <div className="absolute inset-0 rounded-[24px] lg:rounded-image bg-white/[0.72] pointer-events-none" />
       )}
     </div>
   );
@@ -98,8 +99,8 @@ export function Testimonials() {
     <section id="reference" className="bg-background py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="px-5 lg:px-[var(--px)]">
 
-        {/* Header */}
-        <div className="flex items-end justify-between mb-10 lg:mb-16">
+        {/* Header: heading left, arrows right (bottom-aligned per Figma) */}
+        <div className="flex items-end justify-between mb-7 lg:mb-[60px]">
           <div className="text-center lg:text-left w-full lg:w-auto">
             <p className="text-[13px] lg:text-[15px] uppercase tracking-[0.15em] font-normal text-foreground mb-3 lg:mb-4">
               REFERENCE
@@ -108,7 +109,7 @@ export function Testimonials() {
               Zpětná vazba<br />od klientů
             </h2>
           </div>
-          {/* Desktop arrows */}
+          {/* Desktop arrows — bottom-aligned with heading */}
           <div className="hidden lg:flex gap-3 flex-shrink-0">
             <button
               onClick={prev}
@@ -127,7 +128,7 @@ export function Testimonials() {
           </div>
         </div>
 
-        {/* Desktop: 3 fixed-size cards centered */}
+        {/* Desktop: 3 cards, center card active */}
         <div className="hidden lg:flex gap-6 justify-center">
           {visibleIndices.map((idx, position) => (
             <TestimonialCard
@@ -140,7 +141,11 @@ export function Testimonials() {
 
         {/* Mobile: 1 card centered + arrows below */}
         <div className="lg:hidden flex flex-col items-center">
-          <TestimonialCard {...testimonials[activeIndex]} isActive={true} />
+          <TestimonialCard
+            key={activeIndex}
+            {...testimonials[activeIndex]}
+            isActive={true}
+          />
           <div className="flex gap-3 mt-6">
             <button
               onClick={prev}
