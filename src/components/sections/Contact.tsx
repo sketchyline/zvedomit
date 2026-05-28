@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Phone, Mail, MessageCircle } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
 
 const paragraphs = [
   "Je čas na změnu, ať už v práci nebo v osobním životě? Začít s něčím, co delší dobu odkládáte, přitom vlastně ani nevíte proč?",
@@ -78,7 +78,7 @@ export function Contact() {
                 label="WHATSAPP"
                 value="Napište mi a domluvíme se"
                 href="https://wa.me/420737649994"
-                icon={<MessageCircle size={32} />}
+                icon={<img src="/whatsapp_icon.svg" alt="" aria-hidden="true" width={32} height={32} />}
               />
             </div>
           </div>
@@ -109,7 +109,7 @@ export function Contact() {
               label="WHATSAPP"
               value="Napište mi a domluvíme se"
               href="https://wa.me/420737649994"
-              icon={<MessageCircle size={28} />}
+              icon={<img src="/whatsapp_icon.svg" alt="" aria-hidden="true" width={28} height={28} />}
             />
             <ContactItem
               label="EMAIL"
