@@ -4,6 +4,7 @@ import { WhyZvedomit } from "@/components/sections/WhyZvedomit";
 import { MyJourney } from "@/components/sections/MyJourney";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Contact } from "@/components/sections/Contact";
+import { Footer } from "@/components/sections/Footer";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
         <Testimonials />
         <Contact />
       </main>
+      <Footer />
     </>
   );
 }
