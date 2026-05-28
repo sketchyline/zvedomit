@@ -49,7 +49,9 @@ export function Footer() {
 
         {/* ── Mobile layout ── */}
         <div className="lg:hidden px-5 pt-[41px] pb-10">
-          <FooterLogo className="h-[52px] w-auto" />
+          <div className="flex justify-center">
+            <FooterLogo className="h-[52px] w-auto" />
+          </div>
 
           <nav className="mt-14 flex flex-col gap-5">
             {navLinks.map(({ label, href, bold }) => (
