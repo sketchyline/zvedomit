@@ -7,7 +7,6 @@ interface TestimonialCardProps {
   quote: string;
   author: string;
   role: string;
-  rating: number;
   isActive: boolean;
 }
 
@@ -37,11 +36,11 @@ const testimonials = [
 
 function TestimonialCard({ quote, author, role, isActive }: TestimonialCardProps) {
   return (
-    <div className="relative flex-shrink-0 w-[225px] h-[395px] lg:w-[397px] lg:h-[482px]">
-      {/* Card background + border */}
-      <div className="absolute inset-0 bg-white border border-foreground rounded-[24px] lg:rounded-image" />
+    <div className="relative flex-shrink-0 w-[225px] lg:w-[397px]">
+      {/* Card bg — inset-0 so it always matches the card's actual height */}
+      <div className="absolute inset-0 bg-white border border-foreground rounded-[24px] lg:rounded-image pointer-events-none" />
 
-      {/* Decorative quote mark — precise Figma position */}
+      {/* Decorative quote mark — absolute, own layer */}
       <span
         className="absolute top-0 left-[22px] lg:left-[39px] text-[4rem] lg:text-[8rem] font-bold leading-none text-foreground select-none pointer-events-none"
         aria-hidden="true"
@@ -49,7 +48,7 @@ function TestimonialCard({ quote, author, role, isActive }: TestimonialCardProps
         &ldquo;
       </span>
 
-      {/* Stars — precise Figma position */}
+      {/* Stars — absolute, own layer */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/stars.svg"
@@ -59,20 +58,20 @@ function TestimonialCard({ quote, author, role, isActive }: TestimonialCardProps
         className="absolute top-[26px] left-[130px] w-[74px] lg:top-[57px] lg:left-[230px] lg:w-[130px] h-auto pointer-events-none"
       />
 
-      {/* Text — bounded above by quote top (52/98px) and below by author area */}
-      <p className="absolute top-[52px] bottom-[42px] left-[22px] right-[22px] lg:top-[98px] lg:bottom-[73px] lg:left-[40px] lg:right-[40px] text-[13px] lg:text-body text-foreground overflow-hidden">
-        {quote}
-      </p>
-
-      {/* Author — anchored to card bottom per Figma */}
-      <cite className="absolute bottom-[18px] left-[22px] lg:bottom-[30px] lg:left-[39px] not-italic">
-        <span className="block font-bold text-[13px] lg:text-base text-foreground">
-          {author}
-        </span>
-        <span className="block font-normal text-[13px] lg:text-base text-foreground/60">
-          {role}
-        </span>
-      </cite>
+      {/* Content in normal flow — pt pushes text below quote/stars */}
+      <div className="relative flex flex-col h-full min-h-[395px] pt-[52px] pb-[18px] px-[22px] lg:min-h-[482px] lg:pt-[98px] lg:pb-[30px] lg:px-[40px]">
+        <p className="flex-1 text-[13px] lg:text-body text-foreground">
+          {quote}
+        </p>
+        <cite className="not-italic mt-4 lg:mt-6 flex-shrink-0">
+          <span className="block font-bold text-[13px] lg:text-base text-foreground">
+            {author}
+          </span>
+          <span className="block font-normal text-[13px] lg:text-base text-foreground/60">
+            {role}
+          </span>
+        </cite>
+      </div>
 
       {/* Inactive overlay — rgba(255,255,255,0.72) per Figma */}
       {!isActive && (
@@ -99,7 +98,7 @@ export function Testimonials() {
     <section id="reference" className="bg-background py-16 md:py-24 lg:py-32 overflow-hidden">
       <div className="px-5 lg:px-[var(--px)]">
 
-        {/* Header: heading left, arrows right (bottom-aligned per Figma) */}
+        {/* Header */}
         <div className="flex items-end justify-between mb-7 lg:mb-[60px]">
           <div className="text-center lg:text-left w-full lg:w-auto">
             <p className="text-[13px] lg:text-[15px] uppercase tracking-[0.15em] font-normal text-foreground mb-3 lg:mb-4">
@@ -109,7 +108,6 @@ export function Testimonials() {
               Zpětná vazba<br />od klientů
             </h2>
           </div>
-          {/* Desktop arrows — bottom-aligned with heading */}
           <div className="hidden lg:flex gap-3 flex-shrink-0">
             <button
               onClick={prev}
@@ -128,8 +126,8 @@ export function Testimonials() {
           </div>
         </div>
 
-        {/* Desktop: 3 cards, center card active */}
-        <div className="hidden lg:flex gap-6 justify-center">
+        {/* Desktop: 3 cards — items-stretch makes all cards the same height */}
+        <div className="hidden lg:flex gap-6 justify-center items-stretch">
           {visibleIndices.map((idx, position) => (
             <TestimonialCard
               key={`${idx}-${position}`}
@@ -139,7 +137,7 @@ export function Testimonials() {
           ))}
         </div>
 
-        {/* Mobile: 1 card centered + arrows below */}
+        {/* Mobile: 1 active card + arrows below */}
         <div className="lg:hidden flex flex-col items-center">
           <TestimonialCard
             key={activeIndex}
