@@ -35,7 +35,7 @@ const featureCards = [
   },
   {
     icon: "/center_arrow_icon.svg",
-    heading: "Koučování je personalizovaný kurz zvyšování všímavosti",
+    heading: "Koučování jako personalizovaný kurz zvyšování všímavosti",
     body: "K sobě, vlastním pocitům, tomu, co vás pohání, a tomu, co vás naopak brzdí. Pomocí přesně mířených otázek a koučovacích technik vám pomohu najít kroky vpřed, které vycházejí z vašich hodnot a přesvědčení. Pomohu vám zachytit vaše AHA momenty a dát jim směr.",
     bg: "bg-accent-green",
   },
