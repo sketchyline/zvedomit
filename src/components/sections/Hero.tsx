@@ -117,13 +117,13 @@ export function Hero() {
             </div>
           )}
           {visibleCount > 1 && (
-            <div className="absolute z-10 bg-white/90 rounded-[13px] shadow-bubble py-3 px-3 animate-bubble-in"
+            <div className="absolute z-30 bg-white/90 rounded-[13px] shadow-bubble py-3 px-3 animate-bubble-in"
               style={{ left: "3.97%", top: "74.12%", width: "41.94%" }}>
               <p className="text-[13px] leading-snug text-left">{bubbles[1]}</p>
             </div>
           )}
           {visibleCount > 2 && (
-            <div className="absolute z-10 bg-white/90 rounded-[13px] shadow-bubble py-3 px-3 animate-bubble-in"
+            <div className="absolute z-30 bg-white/90 rounded-[13px] shadow-bubble py-3 px-3 animate-bubble-in"
               style={{ left: "53.8%", top: "60.92%", width: "41.94%" }}>
               <p className="text-[13px] leading-snug text-left">{bubbles[2]}</p>
             </div>
