@@ -35,6 +35,15 @@ const config: Config = {
       boxShadow: {
         bubble: "0 4px 13px 0 rgba(0,0,0,0.1)",
       },
+      keyframes: {
+        "bubble-in": {
+          "0%": { opacity: "0", transform: "translateY(24px)" },
+          "100%": { opacity: "1", transform: "translateY(0px)" },
+        },
+      },
+      animation: {
+        "bubble-in": "bubble-in 600ms cubic-bezier(0.22, 1, 0.36, 1) both",
+      },
     },
   },
   plugins: [],
