@@ -52,8 +52,8 @@ function TimelineItem({ item, isLeft }: { item: TimelineItemData; isLeft: boolea
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
-      { threshold: 0.15 }
+      ([entry]) => { setVisible(entry.isIntersecting); },
+      { threshold: 0.25 }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -68,7 +68,7 @@ function TimelineItem({ item, isLeft }: { item: TimelineItemData; isLeft: boolea
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateX(0)" : `translateX(${isLeft ? "60px" : "-60px"})`,
-        transition: "opacity 700ms ease-out, transform 700ms ease-out",
+        transition: "opacity 900ms ease-out, transform 900ms ease-out",
       }}
     >
       {/* Icon — centrovaná nad odstavcem */}
