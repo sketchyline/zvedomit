@@ -43,7 +43,7 @@ export function Navigation() {
   }, [isOpen]);
 
   return (
-    <nav aria-label="Hlavní navigace" className="sticky top-0 z-50 bg-background">
+    <nav aria-label="Hlavní navigace" className="sticky top-0 z-50 bg-white/70 backdrop-blur-md">
       <div className="flex items-center justify-between px-5 md:px-[var(--px)] py-4">
 
         {/* Logo */}
