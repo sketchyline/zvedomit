@@ -43,8 +43,16 @@ export function Navigation() {
   }, [isOpen]);
 
   return (
-    <nav aria-label="Hlavní navigace" className="sticky top-0 z-50 bg-white/70 backdrop-blur-md">
-      <div className="flex items-center justify-between px-5 md:px-[var(--px)] py-4">
+    <nav aria-label="Hlavní navigace" className="sticky top-0 z-50">
+      {/*
+        Frosted glass background je záměrně oddělený do potomka — ne přímo na <nav>.
+        backdrop-filter na elementu vytvoří v Chromu/Safarim nový containing block
+        pro position:fixed potomky, což by zlomilo fullscreen overlay.
+      */}
+      <div className="absolute inset-0 bg-white/70 backdrop-blur-md pointer-events-none" aria-hidden="true" />
+
+      {/* Nav bar content */}
+      <div className="relative flex items-center justify-between px-5 md:px-[var(--px)] py-4">
 
         {/* Logo */}
         <a href="/" aria-label="zvědomit – domů">
@@ -94,7 +102,7 @@ export function Navigation() {
         </button>
       </div>
 
-      {/* Mobile fullscreen overlay */}
+      {/* Mobile fullscreen overlay — fixed inset-0 funguje správně, protože <nav> nemá backdrop-filter */}
       <div
         id="mobile-menu"
         role="dialog"
@@ -104,6 +112,19 @@ export function Navigation() {
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
+        {/* Logo — stejná pozice jako v nav baru */}
+        <a href="/" aria-label="zvědomit – domů" className="absolute top-4 left-5 p-0" onClick={close}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/Nav Logo.svg"
+            alt="zvědomit"
+            width={171}
+            height={33}
+            className="h-[26px] w-auto"
+          />
+        </a>
+
+        {/* Zavřít */}
         <button
           onClick={close}
           aria-label="Zavřít menu"
@@ -111,6 +132,8 @@ export function Navigation() {
         >
           <X size={24} />
         </button>
+
+        {/* Nav links */}
         {navLinks.map((link, i) => (
           <a
             key={link.href}
@@ -122,6 +145,7 @@ export function Navigation() {
             {link.label}
           </a>
         ))}
+
         <a
           href="#kontakt"
           className="mt-4 bg-foreground text-background text-base rounded-full px-10 py-3 hover:opacity-80 transition-opacity duration-150"
