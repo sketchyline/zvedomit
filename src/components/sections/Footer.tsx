@@ -79,7 +79,7 @@ export function Footer() {
 
           <div className="mt-9 flex flex-col gap-5">
             <p className="font-bold text-[18px] text-white">Sledujte mě</p>
-            <a href="#" className="text-[18px] text-white font-normal">LinkedIn</a>
+            <a href="https://www.linkedin.com/in/vojtech-majer/" target="_blank" rel="noopener noreferrer" className="text-[18px] text-white font-normal">LinkedIn</a>
           </div>
 
           <p className="mt-[104px] text-white text-[2.5rem] font-normal leading-tight">
@@ -113,7 +113,7 @@ export function Footer() {
               </nav>
               <div className="flex flex-col gap-5">
                 <p className="font-bold text-[18px] text-white">Sledujte mě</p>
-                <a href="#" className="text-[18px] text-white font-normal">LinkedIn</a>
+                <a href="https://www.linkedin.com/in/vojtech-majer/" target="_blank" rel="noopener noreferrer" className="text-[18px] text-white font-normal">LinkedIn</a>
               </div>
             </div>
           </div>
