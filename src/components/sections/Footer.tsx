@@ -79,7 +79,6 @@ export function Footer() {
 
           <div className="mt-9 flex flex-col gap-5">
             <p className="font-bold text-[18px] text-white">Sledujte mě</p>
-            <a href="#" className="text-[18px] text-white font-normal">Facebook</a>
             <a href="#" className="text-[18px] text-white font-normal">LinkedIn</a>
           </div>
 
@@ -114,7 +113,6 @@ export function Footer() {
               </nav>
               <div className="flex flex-col gap-5">
                 <p className="font-bold text-[18px] text-white">Sledujte mě</p>
-                <a href="#" className="text-[18px] text-white font-normal">Facebook</a>
                 <a href="#" className="text-[18px] text-white font-normal">LinkedIn</a>
               </div>
             </div>
