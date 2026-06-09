@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { ScrollRevealText } from "@/components/ScrollRevealText";
 
 interface TimelineItemData {
   number: number;
@@ -112,9 +115,10 @@ export function MyJourney() {
             >
               &ldquo;
             </span>
-            <p className="text-h3 font-normal text-foreground leading-snug text-center lg:text-left">
-              Strávil jsem desítky hodin v koučování a terapii, které mi pomohly najít udržitelnou cestu v práci i k sobě samému. Výcvik a následná práce s klienty pak ještě víc proměnily způsob, jakým přemýšlím o sobě, vztazích i životě obecně.
-            </p>
+            <ScrollRevealText
+              text="Strávil jsem desítky hodin v koučování a terapii, které mi pomohly najít udržitelnou cestu v práci i k sobě samému. Výcvik a následná práce s klienty pak ještě víc proměnily způsob, jakým přemýšlím o sobě, vztazích i životě obecně."
+              className="text-h3 font-normal text-foreground leading-snug text-center lg:text-left"
+            />
             <span
               className="block text-[4rem] lg:text-[6rem] font-extrabold leading-none text-right mt-3 lg:mt-4 text-foreground"
               aria-hidden="true"
