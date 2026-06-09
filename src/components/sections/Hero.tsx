@@ -49,14 +49,25 @@ export function Hero() {
   const stickyWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const startY = window.scrollY;
+
     function update() {
-      const el = stickyWrapperRef.current;
-      if (!el) return;
-      const scrolledIn = Math.max(0, -el.getBoundingClientRect().top);
-      setVisibleCount(
-        [1, 2, 3].filter((_, i) => scrolledIn >= (i + 1) * BUBBLE_SCROLL_STEP).length
-      );
+      const desktopEl = stickyWrapperRef.current;
+
+      if (desktopEl && desktopEl.offsetHeight > 0) {
+        // Desktop: měřím jak daleko se sticky wrapper posunul za horní hranu viewportu
+        const scrolledIn = Math.max(0, -desktopEl.getBoundingClientRect().top);
+        setVisibleCount(
+          [1, 2, 3].filter((_, i) => scrolledIn >= (i + 1) * BUBBLE_SCROLL_STEP).length
+        );
+      } else {
+        // Mobil: stickyWrapper je display:none, takže getBoundingClientRect vrací nuly
+        // Místo toho používám delta od výchozí pozice scrollu
+        const delta = Math.max(0, window.scrollY - startY);
+        setVisibleCount([80, 200, 350].filter((t) => delta >= t).length);
+      }
     }
+
     window.addEventListener("scroll", update, { passive: true });
     return () => window.removeEventListener("scroll", update);
   }, []);
