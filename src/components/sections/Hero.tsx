@@ -130,7 +130,7 @@ export function Hero() {
             </div>
           )}
           <div className="absolute left-0 right-0 bottom-0 z-30 pointer-events-none"
-            style={{ height: "30%", background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)" }} />
+            style={{ height: "15%", background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)" }} />
         </section>
       </div>
 
