@@ -102,7 +102,7 @@ export function Hero() {
             style={{ left: "3.47%", top: "29.15%", width: "94.54%" }} />
           {/* Fotka nad bublinou 0 (z-20) */}
           <div className="absolute z-20" style={{ left: "1.99%", top: "35.95%", width: "95.78%" }}>
-            <Image src="/vojta_standing 1.png" alt="Vojtěch Majer, kouč zvědomit"
+            <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
               width={658} height={836} className="w-full h-auto" priority />
           </div>
           <h1 className="absolute inset-x-0 text-h1-mobile font-medium text-foreground text-center"
@@ -163,7 +163,7 @@ export function Hero() {
 
             {/* Photo + absolute xl+ bubbles */}
             <div className="relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,580px)]">
-              <Image src="/vojta_standing 1.png" alt="Vojtěch Majer, kouč zvědomit"
+              <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
                 width={658} height={836} className="relative z-10 w-full h-auto" priority />
 
               {visibleCount > 0 && (
