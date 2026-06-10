@@ -36,7 +36,7 @@ function ContactItem({
 
 export function Contact() {
   return (
-    <section id="kontakt" className="bg-background py-16 md:py-24 lg:py-32">
+    <section id="kontakt" className="py-16 md:py-24 lg:py-32">
       <div className="px-5 lg:px-[var(--px)]">
 
         {/* Desktop */}

@@ -66,7 +66,7 @@ export function WhyZvedomit() {
   }, []);
 
   return (
-    <section id="proc-koucovani" className="bg-background py-20 lg:pt-28 lg:pb-0">
+    <section id="proc-koucovani" className="py-20 lg:pt-28 lg:pb-0">
       <div className="px-5 lg:px-[var(--px)]">
         <div className="lg:grid lg:grid-cols-[3fr_2fr] lg:gap-12 lg:items-start">
 

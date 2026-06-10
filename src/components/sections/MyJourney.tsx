@@ -96,21 +96,8 @@ function TimelineItem({ item, isLeft }: { item: TimelineItemData; isLeft: boolea
 
 export function MyJourney() {
   return (
-    <section id="osobni-pribeh" className="relative bg-background py-16 md:py-24 lg:py-32 overflow-hidden">
-      {/* Teal background blob top-left */}
-      <div
-        className="pointer-events-none absolute -z-10"
-        style={{
-          left: 0,
-          top: 0,
-          width: "clamp(300px, 40vw, 700px)",
-          height: "clamp(300px, 40vw, 700px)",
-          background: "radial-gradient(ellipse at top left, #EBFFFE 0%, transparent 70%)",
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="px-5 lg:px-[var(--px)]">
+    <section id="osobni-pribeh" className="relative py-16 md:py-24 lg:py-32 overflow-hidden">
+<div className="px-5 lg:px-[var(--px)]">
 
         {/* Eyebrow */}
         <p className="text-center text-[13px] lg:text-[15px] uppercase tracking-[0.15em] font-normal text-foreground mb-3 lg:mb-4">

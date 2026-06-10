@@ -22,7 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="cs" className={gabarito.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+      </body>
     </html>
   );
 }

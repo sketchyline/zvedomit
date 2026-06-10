@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 const navLinks = [
   { label: "Úvod", href: "#", bold: true },
@@ -22,10 +25,28 @@ function FooterLogo({ className }: { className?: string }) {
 }
 
 export function Footer() {
+  const photoContainerRef = useRef<HTMLDivElement>(null);
+  const [photoY, setPhotoY] = useState(300);
+
+  useEffect(() => {
+    function update() {
+      const el = photoContainerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // progress: 0 = footer právě vstoupil do viewportu, 1 = fotka plně vyjetá
+      const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.75)));
+      setPhotoY(Math.round((1 - progress) * 300));
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+
   return (
     <footer>
       {/* Photo + watermark area */}
-      <div className="relative bg-white overflow-hidden">
+      <div ref={photoContainerRef} className="relative overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           aria-hidden="true"
@@ -45,7 +66,12 @@ export function Footer() {
             fillOpacity={0.18}
           />
         </svg>
-        <div className="relative z-10 max-w-[642px] mx-auto">
+
+        {/* Fotka — vyjíždí zpoza tmavé karty při scrollu */}
+        <div
+          className="relative z-10 max-w-[642px] mx-auto"
+          style={{ transform: `translateY(${photoY}px)` }}
+        >
           <Image
             src="/footer_vojta 1.png"
             alt="Vojtěch Majer"
@@ -56,8 +82,8 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Dark section — bez horního marginu (fotka přisazená), boky + spodek: 14px mobil / 37px desktop */}
-      <div className="mx-[14px] mb-[14px] lg:mx-[37px] lg:mb-[37px] bg-foreground rounded-[24px] lg:rounded-[45px]">
+      {/* Dark section — -mt-[50px] překrývá jen okraj foto oblasti, ruce jsou viditelné */}
+      <div className="relative z-10 -mt-[50px] mx-[14px] mb-[14px] lg:mx-[37px] lg:mb-[37px] bg-foreground rounded-[24px] lg:rounded-[45px]">
 
         {/* ── Mobile layout ── */}
         <div className="lg:hidden px-5 pt-[41px] pb-10">
