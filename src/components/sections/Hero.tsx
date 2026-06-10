@@ -103,7 +103,8 @@ export function Hero() {
           {/* Fotka nad bublinou 0 (z-20) */}
           <div className="absolute z-20" style={{ left: "1.99%", top: "35.95%", width: "95.78%" }}>
             <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
-              width={658} height={836} className="w-full h-auto" priority />
+              width={2528} height={1684} className="w-full h-auto object-cover object-[45%_top]"
+              style={{ aspectRatio: "658/836" }} priority />
           </div>
           <h1 className="absolute inset-x-0 text-h1-mobile font-medium text-foreground text-center"
             style={{ top: "7.58%" }}>
@@ -164,7 +165,8 @@ export function Hero() {
             {/* Photo + absolute xl+ bubbles */}
             <div className="relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,580px)]">
               <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
-                width={658} height={836} className="relative z-10 w-full h-auto" priority />
+                width={2528} height={1684} className="relative z-10 w-full h-auto object-cover object-[45%_top]"
+                style={{ aspectRatio: "658/836" }} priority />
 
               {visibleCount > 0 && (
                 <div className="hidden xl:flex absolute left-[-34%] top-[60%] z-0 w-[280px] bg-white/90 rounded-card shadow-bubble items-center py-4 px-3 animate-bubble-in">
