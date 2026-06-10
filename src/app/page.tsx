@@ -81,9 +81,9 @@ export default function Home() {
         {/* 3. Zelený, vlevo — začátek sekce Reference */}
         <Blob cx={46} top="61%" size={419} color="#EBFFF4" halfWidth={201} />
         {/* 4. Zelený, vpravo — pod fotografií u patičky */}
-        <Blob cx={419} top="95%" size={588} color="#EBFFF4" halfWidth={201} />
+        <Blob cx={419} top="88%" size={588} color="#EBFFF4" halfWidth={201} />
         {/* 5. Modrý, vlevo — pod fotografií u patičky */}
-        <Blob cx={0} top="96%" size={555} color="#EBFFFE" halfWidth={201} />
+        <Blob cx={0} top="89%" size={555} color="#EBFFFE" halfWidth={201} />
       </div>
 
       {/* ── Content layer — nad bloby ── */}
