@@ -17,7 +17,7 @@
 src/
   app/
     layout.tsx              — root layout, načítání fontů, CSS proměnné
-    page.tsx                — hlavní stránka (skládá sekce)
+    page.tsx                — hlavní stránka + BackgroundDecoration blob overlay
     globals.css             — CSS custom properties (--px)
   components/
     ScrollRevealText.tsx    — scroll-driven word reveal (quote v MyJourney)
@@ -28,18 +28,20 @@ src/
       MyJourney.tsx         — sekce "Osobní příběh", ScrollRevealText quote, timeline
       Testimonials.tsx      — reference klientů (3-card peek carousel)
       Contact.tsx           — kontaktní sekce
-      Footer.tsx            — patička (foto + tmavá karta), LinkedIn odkaz
+      Footer.tsx            — patička (foto scroll reveal + tmavá karta), LinkedIn odkaz
 public/
   Nav Logo.svg                        — logo v navigaci
   footer-logo.svg                     — bílé logo v patičce (bez mezer v názvu!)
-  footer_vojta 1.png                  — portrét Vojty (průhledné pozadí)
+  footer_vojta 1.png                  — portrét Vojty v patičce (průhledné pozadí)
   background_logo.svg                 — watermark logo za fotkou (desktop footer)
   footer_background_logo_mobile.svg   — watermark logo za fotkou (mobil footer)
+  BackgroundDecoration.svg            — 5 rozmazaných elips, desktop (1920×5912px, Figma node 153-32)
+  BackgroundDecoration_mobile.svg     — 5 rozmazaných elips, mobil (402×4034px, Figma node 153-45)
   stars.svg                           — hvězdičky v referencích
   whatsapp_icon.svg                   — WhatsApp ikona v kontaktu
   Hero Background.svg                 — gradient pozadí hero sekce
   hero_background_logo.svg            — velký M watermark v hero
-  vojta_standing 1.png                — fotka Vojty v hero (průhledné pozadí)
+  vojta_standing_2.png                — fotka Vojty v hero (landscape 2528×1684, průhledné pozadí)
   vojta_why_coaching_pic.png          — fotka Vojty v WhyZvedomit
   timeline.svg                        — svislá čára mezi timeline položkami (desktop)
   story_pic.png                       — kruhová fotka pro quote v MyJourney
@@ -93,6 +95,84 @@ Používá se jako `px-[var(--px)]` v sekcích.
 
 ## Klíčové implementační detaily
 
+### BackgroundDecoration — blob overlay
+
+Pět rozmazaných elips v pozadí stránky implementovaných jako CSS div bloby v `page.tsx`.
+
+**Proč ne SVG jako `background-image` na body:**  
+Sekce mají bílá pozadí (`bg-background`), která SVG zakrývají. CSS background-image je vždy pod
+všemi potomky elementu, ale sekce s `bg-background` i tak bloby zakryjí. Navíc SVG má fixní
+pixelové pozice pro konkrétní výšku stránky (5912px) — na různých viewportech neseděly pozice
+ke skutečným sekcím.
+
+**Správná implementace v `page.tsx`:**
+```tsx
+// Blob komponenta — 1920px nebo 402px koordinátový systém
+function Blob({ cx, top, size, color, halfWidth = 960 }) {
+  return <div style={{
+    position: "absolute",
+    top,                                      // % výšky stránky
+    left: `calc(50% - ${halfWidth}px + ${cx}px)`,  // centrováno dle designu
+    width: size, height: size,
+    transform: "translate(-50%, -50%)",
+    borderRadius: "50%",
+    background: color,
+    filter: "blur(80px)",
+    pointerEvents: "none",
+  }} />;
+}
+
+export default function Home() {
+  return (
+    <div className="relative">
+      {/* Desktop blob layer (md+) — hidden md:block */}
+      <div className="hidden md:block absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+        <Blob cx={257}  top="37%" size={936}  color="#EBFFF4" />  {/* zelený vlevo — před Osobní příběh */}
+        <Blob cx={1643} top="50%" size={868}  color="#EBFFFE" />  {/* modrý vpravo — střed timeline */}
+        <Blob cx={214}  top="66%" size={952}  color="#EBFFF4" />  {/* zelený vlevo — nadpis Reference */}
+        <Blob cx={249}  top="95%" size={1300} color="#EBFFFE" />  {/* modrý vlevo — pod fotkou */}
+        <Blob cx={1607} top="95%" size={1272} color="#EBFFF4" />  {/* zelený vpravo — pod fotkou */}
+      </div>
+
+      {/* Mobile blob layer (do md) — md:hidden, halfWidth=201 pro 402px design */}
+      <div className="md:hidden absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+        <Blob cx={100} top="38%" size={466} color="#EBFFF4" halfWidth={201} />  {/* zelený — Osobní příběh */}
+        <Blob cx={401} top="50%" size={555} color="#EBFFFE" halfWidth={201} />  {/* modrý — střed timeline */}
+        <Blob cx={46}  top="61%" size={419} color="#EBFFF4" halfWidth={201} />  {/* zelený — Reference */}
+        <Blob cx={419} top="88%" size={588} color="#EBFFF4" halfWidth={201} />  {/* zelený — pod fotkou */}
+        <Blob cx={0}   top="89%" size={555} color="#EBFFFE" halfWidth={201} />  {/* modrý — pod fotkou */}
+      </div>
+
+      {/* Content layer — nad bloby */}
+      <div style={{ position: "relative", zIndex: 1 }}>
+        ...sekce...
+      </div>
+    </div>
+  );
+}
+```
+
+**Zásadní pravidlo stacking context:**  
+- Blob layer: `z-index: 0` (absolutní, page-level)
+- Content layer: `z-index: 1` (relativní, page-level)
+- Sekce s průhledným pozadím (WhyZvedomit, MyJourney, Testimonials, Contact) → bloby prosvítají ✓
+- Hero sekce má `bg-background` → bloby NEZOBRAZÍ (správně — hero má vlastní design)
+- Footer photo container: bez `bg-white` → bloby prosvítají za fotkou ✓
+
+**Sekce bez background-color (průhledné pro bloby):**
+- `WhyZvedomit`: odstraněno `bg-background` ze `<section>`
+- `MyJourney`: odstraněno `bg-background` ze `<section>`
+- `Testimonials`: odstraněno `bg-white` ze `<section>`
+- `Contact`: odstraněno `bg-background` ze `<section>`
+- `Footer` photo container: odstraněno `bg-white`
+
+**Proč ne z-index: -1 na blob elementu:**  
+`body` s `overflow-x: hidden` a `position: relative` vytváří nový stacking context →
+`z-index: -1` skryje element za bílé pozadí body. Řešení: blob layer na `z-index: 0`,
+content layer na `z-index: 1` — oba siblové, správně vrstveni.
+
+---
+
 ### Navigation — frosted glass + mobilní menu
 
 ```tsx
@@ -139,6 +219,14 @@ const MOBILE_EXTRA_SCROLL = 450;  // extra scroll prostor pro mobilní bubliny
 - Bublina 0: `z-[1]` (za hlavou — fotka má `z-20`)
 - Bubliny 1 a 2: `z-30` (v popředí nad fotkou)
 
+**Fotka:**
+```tsx
+<Image src="/vojta_standing_2.png" width={2528} height={1684}
+  className="... object-cover object-[45%_top]"
+  style={{ aspectRatio: "658/836" }} priority />
+```
+Fotka je landscape (2528×1684), portrait crop přes `aspectRatio: "658/836"` + `object-cover`.
+
 **Podmíněné renderování místo opacity:0:**  
 Bubliny se renderují jen pokud `visibleCount > N` — přidání do DOM spustí `animate-bubble-in`.
 Oproti `opacity: 0` je toto bulletproof vůči SSR/hydration.
@@ -154,6 +242,21 @@ Oproti `opacity: 0` je toto bulletproof vůči SSR/hydration.
 - Žádný "ghost text" — slova jsou prostě neviditelná (opacity: 0) dokud nezačne reveal
 
 Používá se v `MyJourney.tsx` pro citát Vojty.
+
+### MyJourney — timeline slide-in animace
+
+Každý `TimelineItem` má IntersectionObserver s `threshold: 0.25`, animace je **bidirectionální**
+(observer se neodpojuje → při scrollu nahoru prvky opět zmizí):
+
+```tsx
+style={{
+  opacity: visible ? 1 : 0,
+  transform: visible ? "translateX(0)" : `translateX(${isLeft ? "60px" : "-60px"})`,
+  transition: "opacity 900ms ease-out, transform 900ms ease-out",
+}}
+```
+
+Levé položky (sudý index) přijíždí zprava (+60px), pravé zleva (-60px).
 
 ### WhyZvedomit — sticky foto + equal-height cards
 
@@ -189,32 +292,47 @@ function equalizeHeights() {
 ```
 Spouští se na mount + resize. Každá karta má `h-full` a `mt-auto` na odstavci (text u spodního okraje).
 
-### Footer — struktura
+### Footer — foto scroll reveal + struktura
 
 ```
 <footer>
-  <div bg-white overflow-hidden>         ← foto oblast
-    background_logo.svg (desktop)        ← absolute, w-[992px]
-    <svg inline> (mobile)                ← absolute, w-full, fillOpacity 0.18
-    <Image foto Vojty>                   ← z-10, max-w-[642px] mx-auto
+  <div ref={photoContainerRef} overflow-hidden>   ← foto oblast (BEZ bg-white — bloby prosvítají)
+    background_logo.svg (desktop)                 ← absolute, w-[992px]
+    <svg inline> (mobile)                         ← absolute, w-full, fillOpacity 0.18
+    <div style={{ transform: translateY(photoY) }}>
+      <Image footer_vojta 1.png />                ← vyjíždí zpoda při scrollu
+    </div>
   </div>
-  <div mx-[14px] mb-[14px]              ← tmavá karta, bez top marginu (foto přisazena)
-       lg:mx-[37px] lg:mb-[37px]>
+  <div -mt-[50px] relative z-10>                 ← tmavá karta, překrývá 50px spodku fotky
     mobile layout
     desktop layout
   </div>
 </footer>
 ```
 
-- **LinkedIn odkaz:** `https://www.linkedin.com/in/vojtech-majer/` — v "Sledujte mě" sekci, `target="_blank" rel="noopener noreferrer"`
+**Scroll reveal animace:**
+```tsx
+const [photoY, setPhotoY] = useState(300);  // startovní offset
+
+useEffect(() => {
+  function update() {
+    const rect = photoContainerRef.current.getBoundingClientRect();
+    const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.75)));
+    setPhotoY(Math.round((1 - progress) * 300));
+  }
+  window.addEventListener("scroll", update, { passive: true });
+}, []);
+```
+Fotka vyjíždí 300px zdola, tmavá karta překrývá jen 50px spodku (nohy/chodidla) → ruce viditelné.
+
+- **LinkedIn odkaz:** `https://www.linkedin.com/in/vojtech-majer/` — v "Sledujte mě" sekci
 - **Footer logo soubor:** `/public/footer-logo.svg` (bez mezer — Vercel/Linux je case-sensitive)
-- **Foto:** `footer_vojta 1.png` má průhledné pozadí, kontejner `bg-white`
-- **Mobile watermark logo:** inline SVG (ne `<img>`), `fillOpacity={0.18}` — soubor s 10% opacity byl na bílém pozadí neviditelný
+- **Mobile watermark logo:** inline SVG (ne `<img>`), `fillOpacity={0.18}`
 
 ### Responsive přístup
 
 Většina sekcí má **dvě verze layoutu** — mobile a desktop. Breakpoint je `lg` = 1024px,
-v Hero je klíčový `md` = 768px.
+v Hero a BackgroundDecoration je klíčový `md` = 768px.
 
 ### Vercel / Linux gotchas
 
