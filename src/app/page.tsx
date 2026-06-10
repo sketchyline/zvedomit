@@ -68,22 +68,22 @@ export default function Home() {
       </div>
 
       {/* ── Mobile blob layer (do md) ── */}
-      {/* SVG design: 402 × 4034px → halfWidth=201, top = cy/4034 */}
+      {/* SVG design: 402 × 4034px, halfWidth=201 */}
       <div
         aria-hidden="true"
         className="md:hidden absolute inset-0 overflow-hidden pointer-events-none"
         style={{ zIndex: 0 }}
       >
-        {/* 1. Zelený, vlevo — cy=377 → 9% */}
-        <Blob cx={100} top="9%" size={466} color="#EBFFF4" halfWidth={201} />
-        {/* 2. Modrý, vpravo — cy=1256 → 31% */}
-        <Blob cx={401} top="31%" size={555} color="#EBFFFE" halfWidth={201} />
-        {/* 3. Zelený, vlevo — cy=2062 → 51% */}
-        <Blob cx={46} top="51%" size={419} color="#EBFFF4" halfWidth={201} />
-        {/* 4. Zelený, vpravo — cy=3420 → 85% */}
-        <Blob cx={419} top="85%" size={588} color="#EBFFF4" halfWidth={201} />
-        {/* 5. Modrý, vlevo — cy=3611 → 90% */}
-        <Blob cx={0} top="90%" size={555} color="#EBFFFE" halfWidth={201} />
+        {/* 1. Zelený, vlevo — začátek sekce Osobní příběh */}
+        <Blob cx={100} top="38%" size={466} color="#EBFFF4" halfWidth={201} />
+        {/* 2. Modrý, vpravo — střed timeline */}
+        <Blob cx={401} top="50%" size={555} color="#EBFFFE" halfWidth={201} />
+        {/* 3. Zelený, vlevo — začátek sekce Reference */}
+        <Blob cx={46} top="61%" size={419} color="#EBFFF4" halfWidth={201} />
+        {/* 4. Zelený, vpravo — pod fotografií u patičky */}
+        <Blob cx={419} top="95%" size={588} color="#EBFFF4" halfWidth={201} />
+        {/* 5. Modrý, vlevo — pod fotografií u patičky */}
+        <Blob cx={0} top="96%" size={555} color="#EBFFFE" halfWidth={201} />
       </div>
 
       {/* ── Content layer — nad bloby ── */}
