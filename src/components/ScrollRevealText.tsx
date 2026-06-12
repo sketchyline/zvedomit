@@ -20,7 +20,8 @@ export function ScrollRevealText({ text, className = "" }: ScrollRevealTextProps
       // Finish when element bottom clears 30% of viewport height
       const entered = vh * 0.85 - rect.top;
       const total = rect.height + vh * 0.55;
-      setProgress(Math.min(Math.max(entered / total, 0), 1));
+      const next = Math.min(Math.max(entered / total, 0), 1);
+      setProgress(prev => Math.max(prev, next));
     }
 
     update();
