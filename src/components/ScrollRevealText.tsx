@@ -15,35 +15,49 @@ export function ScrollRevealText({ text, className = "" }: ScrollRevealTextProps
   const words = text.split(" ");
 
   useEffect(() => {
-    function update() {
-      if (!pRef.current) return;
-      const rect = pRef.current.getBoundingClientRect();
+    let rafId: number | null = null;
+
+    function tick() {
+      const el = pRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
-      const entered = vh * 0.85 - rect.top;
-      const total = rect.height + vh * 0.55;
-      const next = Math.min(Math.max(entered / total, 0), 1);
+      const next = Math.min(Math.max((vh * 0.85 - rect.top) / (rect.height + vh * 0.55), 0), 1);
 
-      // progress nikdy neklesá — slova zůstanou viditelná při scrollu nahoru
-      if (next <= progressRef.current) return;
-      progressRef.current = next;
+      if (next > progressRef.current) {
+        progressRef.current = next;
+        const count = spansRef.current.length;
+        spansRef.current.forEach((span, i) => {
+          const wp = Math.min(Math.max((next - i / count) / (1 / count), 0), 1);
+          span.style.opacity = String(wp);
+        });
+      }
 
-      const count = spansRef.current.length;
-      spansRef.current.forEach((span, i) => {
-        const threshold = i / count;
-        const wordProgress = Math.min(Math.max((next - threshold) / (1 / count), 0), 1);
-        span.style.opacity = String(wordProgress);
-      });
+      if (progressRef.current < 1) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = null;
+        observer.disconnect();
+      }
     }
 
-    // Žádný rAF throttle — přímé volání na každý scroll event.
-    // Na mobilu Safari se eventy spouštějí v burst-ech; throttle by způsoboval
-    // skokové odhalení více slov naráz místo plynulého postupu.
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update, { passive: true });
+    // IntersectionObserver spustí rAF smyčku — nezávisle na scroll eventech.
+    // Na iOS Safari scroll eventy nefirují během momentum scrollu → smyčka
+    // čte getBoundingClientRect() každý frame a animace je vždy plynulá.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && rafId === null) {
+          rafId = requestAnimationFrame(tick);
+        }
+      },
+      { rootMargin: "0px 0px -5% 0px" }
+    );
+
+    if (pRef.current) observer.observe(pRef.current);
+
     return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      observer.disconnect();
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, []);
 

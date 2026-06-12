@@ -29,7 +29,9 @@ export function Footer() {
   const photoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function update() {
+    let rafId: number | null = null;
+
+    function tick() {
       const container = photoContainerRef.current;
       const photo = photoRef.current;
       if (!container || !photo) return;
@@ -37,14 +39,32 @@ export function Footer() {
       const vh = window.innerHeight;
       const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.75)));
       photo.style.transform = `translateY(${(1 - progress) * 300}px)`;
+
+      if (progress < 1) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = null;
+        observer.disconnect();
+      }
     }
 
-    // Žádný rAF throttle ani will-change:transform.
-    // will-change:transform uvnitř overflow:hidden způsobuje na WebKit/Safari,
-    // že composited child escapuje clip oblasti rodiče → foto vyčnívalo pod kartu.
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
+    // IntersectionObserver + rAF smyčka — stejný důvod jako ScrollRevealText:
+    // iOS Safari nefiruje scroll eventy během momentum scrollu.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && rafId === null) {
+          rafId = requestAnimationFrame(tick);
+        }
+      },
+      { rootMargin: "100px" }
+    );
+
+    if (photoContainerRef.current) observer.observe(photoContainerRef.current);
+
+    return () => {
+      observer.disconnect();
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
