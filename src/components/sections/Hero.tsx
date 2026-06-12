@@ -70,9 +70,16 @@ export function Hero() {
 
           {/* Photo + absolute xl+ bubbles */}
           <div className="relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,580px)]">
-            <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
-              width={2528} height={1684} className="relative z-10 w-full h-auto object-cover object-[45%_top]"
-              style={{ aspectRatio: "658/836" }} priority />
+            {/* Wrapper omezuje výšku fotky na krátkých viewportech (13" notebooky).
+                11rem = pt-10 + h1 + mt-6 + spodní rezerva */}
+            <div
+              className="w-full overflow-hidden"
+              style={{ maxHeight: `calc(100vh - ${NAV_HEIGHT}px - 11rem)` }}
+            >
+              <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
+                width={2528} height={1684} className="relative z-10 w-full h-auto object-cover object-[45%_top]"
+                style={{ aspectRatio: "658/836" }} priority />
+            </div>
 
             <div className="hidden xl:flex absolute left-[-34%] top-[60%] z-0 w-[280px] bg-white/90 rounded-card shadow-bubble items-center py-4 px-3 animate-bubble-in"
               style={{ animationDelay: `${BUBBLE_DELAYS[0]}ms` }}>
