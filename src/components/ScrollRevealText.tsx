@@ -11,7 +11,6 @@ export function ScrollRevealText({ text, className = "" }: ScrollRevealTextProps
   const pRef = useRef<HTMLParagraphElement>(null);
   const spansRef = useRef<HTMLSpanElement[]>([]);
   const progressRef = useRef(0);
-  const rafRef = useRef<number | null>(null);
 
   const words = text.split(" ");
 
@@ -36,26 +35,20 @@ export function ScrollRevealText({ text, className = "" }: ScrollRevealTextProps
       });
     }
 
-    function onScroll() {
-      if (rafRef.current !== null) return;
-      rafRef.current = requestAnimationFrame(() => {
-        rafRef.current = null;
-        update();
-      });
-    }
-
+    // Žádný rAF throttle — přímé volání na každý scroll event.
+    // Na mobilu Safari se eventy spouštějí v burst-ech; throttle by způsoboval
+    // skokové odhalení více slov naráz místo plynulého postupu.
     update();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update, { passive: true });
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
   return (
-    <p ref={pRef} className={className} style={{ willChange: "contents" }}>
+    <p ref={pRef} className={className}>
       {words.map((word, i) => (
         <span
           key={i}

@@ -27,7 +27,6 @@ function FooterLogo({ className }: { className?: string }) {
 export function Footer() {
   const photoContainerRef = useRef<HTMLDivElement>(null);
   const photoRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     function update() {
@@ -40,20 +39,12 @@ export function Footer() {
       photo.style.transform = `translateY(${(1 - progress) * 300}px)`;
     }
 
-    function onScroll() {
-      if (rafRef.current !== null) return;
-      rafRef.current = requestAnimationFrame(() => {
-        rafRef.current = null;
-        update();
-      });
-    }
-
+    // Žádný rAF throttle ani will-change:transform.
+    // will-change:transform uvnitř overflow:hidden způsobuje na WebKit/Safari,
+    // že composited child escapuje clip oblasti rodiče → foto vyčnívalo pod kartu.
     update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    };
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
   }, []);
 
   return (
@@ -84,7 +75,7 @@ export function Footer() {
         <div
           ref={photoRef}
           className="relative z-10 max-w-[642px] mx-auto"
-          style={{ transform: "translateY(300px)", willChange: "transform" }}
+          style={{ transform: "translateY(300px)" }}
         >
           <Image
             src="/footer_vojta 1.png"
