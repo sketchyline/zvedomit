@@ -22,6 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="cs" className={gabarito.variable}>
+      <head>
+        {/* Zakáže obnovení pozice scrollu při refreshi — stránka vždy začíná nahoře */}
+        <script dangerouslySetInnerHTML={{ __html: 'history.scrollRestoration="manual";window.scrollTo(0,0)' }} />
+      </head>
       <body>
         {children}
       </body>
