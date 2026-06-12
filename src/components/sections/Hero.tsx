@@ -63,15 +63,14 @@ export function Hero() {
         <img aria-hidden="true" src="/hero_background_logo.svg" alt=""
           className="absolute left-1/2 -translate-x-1/2 top-[clamp(60px,8vw,140px)] w-[57%] pointer-events-none select-none" />
 
+        {/* Heading + md–xl photo + md–xl column bubbles */}
         <div className="relative z-10 flex flex-col items-center pt-10 px-[var(--px)] h-full">
           <h1 className="font-medium text-foreground text-center text-h1 w-full">
             Máte to v sobě
           </h1>
 
-          {/* Photo + absolute xl+ bubbles */}
-          <div className="relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,580px)]">
-            {/* Wrapper omezuje výšku fotky na krátkých viewportech (13" notebooky).
-                11rem = pt-10 + h1 + mt-6 + spodní rezerva */}
+          {/* Photo — md to xl (in flow, above column bubbles) */}
+          <div className="xl:hidden relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,580px)]">
             <div
               className="w-full overflow-hidden"
               style={{ maxHeight: `calc(100vh - ${NAV_HEIGHT}px - 11rem)` }}
@@ -79,19 +78,6 @@ export function Hero() {
               <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
                 width={2528} height={1684} className="relative z-10 w-full h-auto object-cover object-[45%_top]"
                 style={{ aspectRatio: "658/836" }} priority />
-            </div>
-
-            <div className="hidden xl:flex absolute left-[-34%] top-[60%] z-0 w-[280px] bg-white/90 rounded-card shadow-bubble items-center py-4 px-3 animate-bubble-in"
-              style={{ animationDelay: `${BUBBLE_DELAYS[0]}ms` }}>
-              <p className="text-body text-left">{bubbles[0]}</p>
-            </div>
-            <div className="hidden xl:flex absolute left-[71%] top-[39%] z-20 w-[280px] bg-white/90 rounded-card shadow-bubble items-center py-4 px-3 animate-bubble-in"
-              style={{ animationDelay: `${BUBBLE_DELAYS[1]}ms` }}>
-              <p className="text-body text-left">{bubbles[1]}</p>
-            </div>
-            <div className="hidden xl:flex absolute left-[83%] top-[69%] z-20 w-[280px] bg-white/90 rounded-card shadow-bubble items-center py-4 px-3 animate-bubble-in"
-              style={{ animationDelay: `${BUBBLE_DELAYS[2]}ms` }}>
-              <p className="text-body text-left">{bubbles[2]}</p>
             </div>
           </div>
 
@@ -103,6 +89,34 @@ export function Hero() {
                 <p className="text-body text-left">{text}</p>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Photo + xl+ bubbles — absolute bottom-0, vždy přilne ke spodní hraně hero */}
+        <div
+          className="hidden xl:block absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,580px)]"
+        >
+          {/* max-height zabrání překryvu nadpisu na krátkých viewportech */}
+          <div
+            className="w-full overflow-hidden"
+            style={{ maxHeight: `calc(100vh - ${NAV_HEIGHT}px - 11rem)` }}
+          >
+            <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
+              width={2528} height={1684} className="relative z-10 w-full h-auto object-cover object-[45%_top]"
+              style={{ aspectRatio: "658/836" }} priority />
+          </div>
+
+          <div className="absolute left-[-34%] top-[60%] z-0 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
+            style={{ animationDelay: `${BUBBLE_DELAYS[0]}ms` }}>
+            <p className="text-body text-left">{bubbles[0]}</p>
+          </div>
+          <div className="absolute left-[71%] top-[39%] z-20 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
+            style={{ animationDelay: `${BUBBLE_DELAYS[1]}ms` }}>
+            <p className="text-body text-left">{bubbles[1]}</p>
+          </div>
+          <div className="absolute left-[83%] top-[69%] z-20 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
+            style={{ animationDelay: `${BUBBLE_DELAYS[2]}ms` }}>
+            <p className="text-body text-left">{bubbles[2]}</p>
           </div>
         </div>
 
