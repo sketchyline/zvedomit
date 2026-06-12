@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const navLinks = [
   { label: "Úvod", href: "#", bold: true },
@@ -26,21 +26,34 @@ function FooterLogo({ className }: { className?: string }) {
 
 export function Footer() {
   const photoContainerRef = useRef<HTMLDivElement>(null);
-  const [photoY, setPhotoY] = useState(300);
+  const photoRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     function update() {
-      const el = photoContainerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
+      const container = photoContainerRef.current;
+      const photo = photoRef.current;
+      if (!container || !photo) return;
+      const rect = container.getBoundingClientRect();
       const vh = window.innerHeight;
-      // progress: 0 = footer právě vstoupil do viewportu, 1 = fotka plně vyjetá
       const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.75)));
-      setPhotoY(Math.round((1 - progress) * 300));
+      photo.style.transform = `translateY(${(1 - progress) * 300}px)`;
     }
-    window.addEventListener("scroll", update, { passive: true });
+
+    function onScroll() {
+      if (rafRef.current !== null) return;
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null;
+        update();
+      });
+    }
+
     update();
-    return () => window.removeEventListener("scroll", update);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   return (
@@ -69,8 +82,9 @@ export function Footer() {
 
         {/* Fotka — vyjíždí zpoza tmavé karty při scrollu */}
         <div
+          ref={photoRef}
           className="relative z-10 max-w-[642px] mx-auto"
-          style={{ transform: `translateY(${photoY}px)` }}
+          style={{ transform: "translateY(300px)", willChange: "transform" }}
         >
           <Image
             src="/footer_vojta 1.png"
