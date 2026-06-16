@@ -35,25 +35,28 @@ export function Footer() {
 
     // pageYOffset === 0 at mount — getBoundingClientRect().top equals document-relative position
     let elTop = container.getBoundingClientRect().top;
+    let rafId: number;
 
-    function update() {
-      // window.pageYOffset is always current on iOS during momentum scroll
+    function tick() {
+      // rAF at 60 fps — window.pageYOffset always current, no scroll event dependency
       const scrollY = window.pageYOffset;
       const vh = window.innerHeight;
       const progress = Math.max(0, Math.min(1, (scrollY + vh - elTop) / (vh * 0.75)));
       photo!.style.transform = `translateY(${Math.round((1 - progress) * 300)}px)`;
+
+      if (progress < 1) {
+        rafId = requestAnimationFrame(tick);
+      }
     }
 
     function onResize() {
       elTop = container!.getBoundingClientRect().top + window.pageYOffset;
-      update();
     }
 
-    update();
-    window.addEventListener("scroll", update, { passive: true });
+    rafId = requestAnimationFrame(tick);
     window.addEventListener("resize", onResize, { passive: true });
     return () => {
-      window.removeEventListener("scroll", update);
+      cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
     };
   }, []);

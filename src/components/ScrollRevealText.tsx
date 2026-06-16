@@ -18,46 +18,48 @@ export function ScrollRevealText({ text, className = "" }: ScrollRevealTextProps
     const el = containerRef.current;
     if (!el) return;
 
-    // pageYOffset === 0 at mount (head script forces scroll to top on load)
-    // so getBoundingClientRect().top equals the document-relative position
+    // pageYOffset === 0 at mount (head script forces scroll to top)
     let elTop = el.getBoundingClientRect().top;
     let elHeight = el.offsetHeight;
+    let rafId: number;
 
-    function update() {
-      // window.pageYOffset is always current on iOS — unlike getBoundingClientRect()
-      // which can return stale values during momentum scroll after finger lift
+    function tick() {
+      // rAF fires at 60 fps and window.pageYOffset is always current —
+      // unlike scroll events which can be sparse during iOS momentum scroll
       const scrollY = window.pageYOffset;
       const vh = window.innerHeight;
       const entered = scrollY + vh * 0.85 - elTop;
       const total = elHeight + vh * 0.55;
       const next = Math.min(Math.max(entered / total, 0), 1);
 
-      if (next <= progressRef.current) return;
-      progressRef.current = next;
+      if (next > progressRef.current) {
+        progressRef.current = next;
+        wordsRef.current.forEach((span, i) => {
+          if (!span) return;
+          const threshold = i / words.length;
+          const wordProgress = Math.min(
+            Math.max((next - threshold) / (1 / words.length), 0),
+            1
+          );
+          span.style.opacity = String(wordProgress);
+        });
+      }
 
-      // Direct DOM update — no React re-render, no batching delay
-      wordsRef.current.forEach((span, i) => {
-        if (!span) return;
-        const threshold = i / words.length;
-        const wordProgress = Math.min(
-          Math.max((next - threshold) / (1 / words.length), 0),
-          1
-        );
-        span.style.opacity = String(wordProgress);
-      });
+      // Keep looping until fully revealed, then stop
+      if (progressRef.current < 1) {
+        rafId = requestAnimationFrame(tick);
+      }
     }
 
     function onResize() {
       elTop = el!.getBoundingClientRect().top + window.pageYOffset;
       elHeight = el!.offsetHeight;
-      update();
     }
 
-    update();
-    window.addEventListener("scroll", update, { passive: true });
+    rafId = requestAnimationFrame(tick);
     window.addEventListener("resize", onResize, { passive: true });
     return () => {
-      window.removeEventListener("scroll", update);
+      cancelAnimationFrame(rafId);
       window.removeEventListener("resize", onResize);
     };
   }, [words]);
