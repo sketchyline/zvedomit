@@ -89,7 +89,7 @@ export function Footer() {
         <div
           ref={photoRef}
           className="relative z-10 max-w-[642px] mx-auto"
-          style={{ transform: "translateY(300px)" }}
+          style={{ transform: "translateY(300px)", transition: "transform 0.2s ease" }}
         >
           <Image
             src="/footer_vojta 1.png"

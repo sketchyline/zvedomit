@@ -72,7 +72,7 @@ export function ScrollRevealText({ text, className = "" }: ScrollRevealTextProps
           ref={(el) => {
             wordsRef.current[i] = el;
           }}
-          style={{ opacity: 0 }}
+          style={{ opacity: 0, transition: "opacity 0.25s ease" }}
         >
           {word}
           {i < words.length - 1 ? " " : ""}
