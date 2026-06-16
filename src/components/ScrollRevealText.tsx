@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface ScrollRevealTextProps {
   text: string;
@@ -8,76 +8,48 @@ interface ScrollRevealTextProps {
 }
 
 export function ScrollRevealText({ text, className = "" }: ScrollRevealTextProps) {
-  const containerRef = useRef<HTMLParagraphElement>(null);
-  const wordsRef = useRef<(HTMLSpanElement | null)[]>([]);
-  const progressRef = useRef(0);
-
-  const words = useMemo(() => text.split(" "), [text]);
+  const ref = useRef<HTMLParagraphElement>(null);
+  const [progress, setProgress] = useState(0);
+  // Tracks the highest progress ever reached — words only reveal, never hide.
+  // setProgress(next) stays bidirectional so scroll events always trigger a
+  // re-render (even when iOS returns slightly stale getBoundingClientRect values),
+  // keeping the animation alive during momentum scroll.
+  const maxProgress = useRef(0);
 
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    // pageYOffset === 0 at mount (head script forces scroll to top)
-    let elTop = el.getBoundingClientRect().top;
-    let elHeight = el.offsetHeight;
-    let rafId: number;
-
-    function tick() {
-      // rAF fires at 60 fps and window.pageYOffset is always current —
-      // unlike scroll events which can be sparse during iOS momentum scroll
-      const scrollY = window.pageYOffset;
+    function update() {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
       const vh = window.innerHeight;
-      const entered = scrollY + vh * 0.85 - elTop;
-      const total = elHeight + vh * 0.55;
+      const entered = vh * 0.85 - rect.top;
+      const total = rect.height + vh * 0.55;
       const next = Math.min(Math.max(entered / total, 0), 1);
-
-      if (next > progressRef.current) {
-        progressRef.current = next;
-        wordsRef.current.forEach((span, i) => {
-          if (!span) return;
-          const threshold = i / words.length;
-          const wordProgress = Math.min(
-            Math.max((next - threshold) / (1 / words.length), 0),
-            1
-          );
-          span.style.opacity = String(wordProgress);
-        });
-      }
-
-      // Keep looping until fully revealed, then stop
-      if (progressRef.current < 1) {
-        rafId = requestAnimationFrame(tick);
-      }
+      maxProgress.current = Math.max(maxProgress.current, next);
+      setProgress(next); // bidirectional — always triggers re-render
     }
-
-    function onResize() {
-      elTop = el!.getBoundingClientRect().top + window.pageYOffset;
-      elHeight = el!.offsetHeight;
-    }
-
-    rafId = requestAnimationFrame(tick);
-    window.addEventListener("resize", onResize, { passive: true });
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
     return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
     };
-  }, [words]);
+  }, []);
 
+  const words = text.split(" ");
   return (
-    <p ref={containerRef} className={className}>
-      {words.map((word, i) => (
-        <span
-          key={i}
-          ref={(el) => {
-            wordsRef.current[i] = el;
-          }}
-          style={{ opacity: 0, transition: "opacity 0.25s ease" }}
-        >
-          {word}
-          {i < words.length - 1 ? " " : ""}
-        </span>
-      ))}
+    <p ref={ref} className={className}>
+      {words.map((word, i) => {
+        const p = maxProgress.current; // one-way: words stay visible once revealed
+        const threshold = i / words.length;
+        const wordProgress = Math.min(Math.max((p - threshold) / (1 / words.length), 0), 1);
+        return (
+          <span key={i} style={{ opacity: wordProgress }}>
+            {word}
+            {i < words.length - 1 ? " " : ""}
+          </span>
+        );
+      })}
     </p>
   );
 }

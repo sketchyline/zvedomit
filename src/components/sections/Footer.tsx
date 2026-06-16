@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const navLinks = [
   { label: "Úvod", href: "#", bold: true },
@@ -26,39 +26,20 @@ function FooterLogo({ className }: { className?: string }) {
 
 export function Footer() {
   const photoContainerRef = useRef<HTMLDivElement>(null);
-  const photoRef = useRef<HTMLDivElement>(null);
+  const [photoY, setPhotoY] = useState(300);
 
   useEffect(() => {
-    const container = photoContainerRef.current;
-    const photo = photoRef.current;
-    if (!container || !photo) return;
-
-    // pageYOffset === 0 at mount — getBoundingClientRect().top equals document-relative position
-    let elTop = container.getBoundingClientRect().top;
-    let rafId: number;
-
-    function tick() {
-      // rAF at 60 fps — window.pageYOffset always current, no scroll event dependency
-      const scrollY = window.pageYOffset;
+    function update() {
+      const el = photoContainerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
-      const progress = Math.max(0, Math.min(1, (scrollY + vh - elTop) / (vh * 0.75)));
-      photo!.style.transform = `translateY(${Math.round((1 - progress) * 300)}px)`;
-
-      if (progress < 1) {
-        rafId = requestAnimationFrame(tick);
-      }
+      const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.75)));
+      setPhotoY(Math.round((1 - progress) * 300));
     }
-
-    function onResize() {
-      elTop = container!.getBoundingClientRect().top + window.pageYOffset;
-    }
-
-    rafId = requestAnimationFrame(tick);
-    window.addEventListener("resize", onResize, { passive: true });
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", onResize);
-    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => window.removeEventListener("scroll", update);
   }, []);
 
   return (
@@ -87,9 +68,8 @@ export function Footer() {
 
         {/* Fotka — vyjíždí zpoza tmavé karty při scrollu */}
         <div
-          ref={photoRef}
           className="relative z-10 max-w-[642px] mx-auto"
-          style={{ transform: "translateY(300px)", transition: "transform 0.2s ease" }}
+          style={{ transform: `translateY(${photoY}px)` }}
         >
           <Image
             src="/footer_vojta 1.png"
