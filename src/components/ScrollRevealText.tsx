@@ -9,47 +9,43 @@ interface ScrollRevealTextProps {
 
 export function ScrollRevealText({ text, className = "" }: ScrollRevealTextProps) {
   const ref = useRef<HTMLParagraphElement>(null);
-  const [progress, setProgress] = useState(0);
-  // Tracks the highest progress ever reached — words only reveal, never hide.
-  // setProgress(next) stays bidirectional so scroll events always trigger a
-  // re-render (even when iOS returns slightly stale getBoundingClientRect values),
-  // keeping the animation alive during momentum scroll.
-  const maxProgress = useRef(0);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    function update() {
-      if (!ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const entered = vh * 0.85 - rect.top;
-      const total = rect.height + vh * 0.55;
-      const next = Math.min(Math.max(entered / total, 0), 1);
-      maxProgress.current = Math.max(maxProgress.current, next);
-      setProgress(next); // bidirectional — always triggers re-render
-    }
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
+    const el = ref.current;
+    if (!el) return;
+    // IntersectionObserver runs on the compositor thread — fires reliably on iOS
+    // even during fast momentum scroll, unlike scroll events which iOS throttles.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   const words = text.split(" ");
   return (
     <p ref={ref} className={className}>
-      {words.map((word, i) => {
-        const p = maxProgress.current; // one-way: words stay visible once revealed
-        const threshold = i / words.length;
-        const wordProgress = Math.min(Math.max((p - threshold) / (1 / words.length), 0), 1);
-        return (
-          <span key={i} style={{ opacity: wordProgress }}>
-            {word}
-            {i < words.length - 1 ? " " : ""}
-          </span>
-        );
-      })}
+      {words.map((word, i) => (
+        <span
+          key={i}
+          style={{
+            opacity: visible ? 1 : 0,
+            // CSS transition runs on GPU compositor — smooth regardless of JS thread.
+            // Stagger delay creates the one-word-at-a-time cascade effect.
+            transition: visible ? `opacity 0.35s ease ${i * 30}ms` : "none",
+          }}
+        >
+          {word}
+          {i < words.length - 1 ? " " : ""}
+        </span>
+      ))}
     </p>
   );
 }
