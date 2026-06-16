@@ -52,7 +52,12 @@ function TimelineItem({ item, isLeft }: { item: TimelineItemData; isLeft: boolea
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => { setVisible(entry.isIntersecting); },
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
       { threshold: 0.25 }
     );
     observer.observe(el);

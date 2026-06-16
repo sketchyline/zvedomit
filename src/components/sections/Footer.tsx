@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const navLinks = [
   { label: "Úvod", href: "#", bold: true },
@@ -26,21 +26,36 @@ function FooterLogo({ className }: { className?: string }) {
 
 export function Footer() {
   const photoContainerRef = useRef<HTMLDivElement>(null);
-  const [photoY, setPhotoY] = useState(300);
+  const photoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const container = photoContainerRef.current;
+    const photo = photoRef.current;
+    if (!container || !photo) return;
+
+    // pageYOffset === 0 at mount — getBoundingClientRect().top equals document-relative position
+    let elTop = container.getBoundingClientRect().top;
+
     function update() {
-      const el = photoContainerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
+      // window.pageYOffset is always current on iOS during momentum scroll
+      const scrollY = window.pageYOffset;
       const vh = window.innerHeight;
-      // progress: 0 = footer právě vstoupil do viewportu, 1 = fotka plně vyjetá
-      const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.75)));
-      setPhotoY(Math.round((1 - progress) * 300));
+      const progress = Math.max(0, Math.min(1, (scrollY + vh - elTop) / (vh * 0.75)));
+      photo!.style.transform = `translateY(${Math.round((1 - progress) * 300)}px)`;
     }
-    window.addEventListener("scroll", update, { passive: true });
+
+    function onResize() {
+      elTop = container!.getBoundingClientRect().top + window.pageYOffset;
+      update();
+    }
+
     update();
-    return () => window.removeEventListener("scroll", update);
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return (
@@ -69,8 +84,9 @@ export function Footer() {
 
         {/* Fotka — vyjíždí zpoza tmavé karty při scrollu */}
         <div
+          ref={photoRef}
           className="relative z-10 max-w-[642px] mx-auto"
-          style={{ transform: `translateY(${photoY}px)` }}
+          style={{ transform: "translateY(300px)" }}
         >
           <Image
             src="/footer_vojta 1.png"
