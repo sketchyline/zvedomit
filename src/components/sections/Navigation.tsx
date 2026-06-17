@@ -44,12 +44,7 @@ export function Navigation() {
 
   return (
     <nav aria-label="Hlavní navigace" className="sticky top-0 z-50">
-      {/*
-        Frosted glass background je záměrně oddělený do potomka — ne přímo na <nav>.
-        backdrop-filter na elementu vytvoří v Chromu/Safarim nový containing block
-        pro position:fixed potomky, což by zlomilo fullscreen overlay.
-      */}
-      <div className="absolute inset-0 bg-white/70 backdrop-blur-md pointer-events-none" aria-hidden="true" />
+      <div className="absolute inset-0 bg-white/90 pointer-events-none" aria-hidden="true" />
 
       {/* Nav bar content */}
       <div className="relative flex items-center justify-between px-5 md:px-[var(--px)] py-4">

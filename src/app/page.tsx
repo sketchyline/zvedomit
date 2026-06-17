@@ -35,11 +35,12 @@ function Blob({
         left: `calc(50% - ${halfWidth}px + ${cx}px)`,
         width: size,
         height: size,
-        transform: "translate(-50%, -50%)",
+        transform: "translate(-50%, -50%) translateZ(0)",
         borderRadius: "50%",
         background: color,
         filter: "blur(80px)",
         pointerEvents: "none",
+        willChange: "transform",
       }}
     />
   );
