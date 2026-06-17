@@ -88,16 +88,22 @@ export default function Home() {
       </div>
 
       {/* ── Content layer — nad bloby ── */}
-      <div className="max-w-[1920px] mx-auto" style={{ position: "relative", zIndex: 1 }}>
+      <div style={{ position: "relative", zIndex: 1 }}>
+        {/* Nav + Hero jsou full-width — Hero má vlastní bg-background + overflow-hidden */}
         <Navigation />
         <main>
           <Hero />
-          <WhyZvedomit />
-          <MyJourney />
-          <Testimonials />
-          <Contact />
+          {/* Střední sekce jsou průhledné, bloby prosvítají — max-w centruje obsah */}
+          <div className="max-w-[1920px] mx-auto">
+            <WhyZvedomit />
+            <MyJourney />
+            <Testimonials />
+            <Contact />
+          </div>
         </main>
-        <Footer />
+        <div className="max-w-[1920px] mx-auto">
+          <Footer />
+        </div>
       </div>
     </div>
   );
