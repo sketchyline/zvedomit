@@ -44,7 +44,7 @@ export function Footer() {
           observer.disconnect();
         }
       },
-      { threshold: 0, rootMargin: "0px 0px 400px 0px" }
+      { threshold: 0, rootMargin: "0px 0px 150px 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();
