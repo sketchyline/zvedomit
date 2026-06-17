@@ -55,14 +55,18 @@ body {
 
 /* CSS Scroll-Driven Animations — compositor thread, žádný JS při scrollu.
    Safari 18+ / iOS 18+. Starší prohlížeče: elementy jsou normálně viditelné (no animation). */
-@supports (animation-timeline: view()) {
-  .word-reveal {
-    opacity: 0;
-    animation: word-reveal linear both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 100%;
-  }
+/* ScrollRevealText — IO přidá .words-revealed třidu na <p>,
+   každé slovo dostane svůj čas přes --word-delay CSS proměnnou. */
+.word-reveal {
+  opacity: 0;
+}
 
+.words-revealed .word-reveal {
+  animation: word-reveal 0.5s ease var(--word-delay, 0ms) both;
+}
+
+/* Footer + Timeline — CSS Scroll-Driven Animations (blokové elementy) */
+@supports (animation-timeline: view()) {
   .footer-photo-reveal {
     transform: translateY(300px);
     animation: photo-reveal linear both;
