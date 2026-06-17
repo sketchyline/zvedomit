@@ -47,18 +47,31 @@ const timelineItems: TimelineItemData[] = [
 function TimelineItem({ item, isLeft }: { item: TimelineItemData; isLeft: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setReducedMotion(true);
+      setVisible(true);
+      return;
+    }
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => setVisible(entry.isIntersecting),
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
       { threshold: 0.25 }
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
+  // Left items in each row appear first, right items follow 100 ms later
+  const staggerDelay = isLeft ? 0 : 100;
   const numColor = item.color === "teal" ? "text-accent-teal" : "text-accent-green";
 
   return (
@@ -68,7 +81,9 @@ function TimelineItem({ item, isLeft }: { item: TimelineItemData; isLeft: boolea
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateX(0)" : `translateX(${isLeft ? "60px" : "-60px"})`,
-        transition: "opacity 900ms ease-out, transform 900ms ease-out",
+        transition: reducedMotion
+          ? "none"
+          : `opacity 900ms ease-out ${staggerDelay}ms, transform 900ms ease-out ${staggerDelay}ms`,
       }}
     >
       {/* Icon — centrovaná nad odstavcem */}

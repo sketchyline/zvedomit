@@ -27,12 +27,23 @@ function FooterLogo({ className }: { className?: string }) {
 export function Footer() {
   const photoRef = useRef<HTMLDivElement>(null);
   const [photoVisible, setPhotoVisible] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setReducedMotion(true);
+      setPhotoVisible(true);
+      return;
+    }
     const el = photoRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => setPhotoVisible(entry.isIntersecting),
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setPhotoVisible(true);
+          observer.disconnect();
+        }
+      },
       { threshold: 0.1 }
     );
     observer.observe(el);
@@ -69,7 +80,7 @@ export function Footer() {
           className="relative z-10 max-w-[642px] mx-auto"
           style={{
             transform: photoVisible ? "translateY(0)" : "translateY(300px)",
-            transition: "transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
+            transition: reducedMotion ? "none" : "transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <Image
