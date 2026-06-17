@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollRevealText } from "@/components/ScrollRevealText";
 
 interface TimelineItemData {
@@ -46,18 +46,14 @@ const timelineItems: TimelineItemData[] = [
 
 function TimelineItem({ item, isLeft }: { item: TimelineItemData; isLeft: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add("timeline-revealed");
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0.25 }
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -68,7 +64,12 @@ function TimelineItem({ item, isLeft }: { item: TimelineItemData; isLeft: boolea
   return (
     <div
       ref={ref}
-      className={`w-full lg:max-w-[27rem] ${isLeft ? "timeline-from-right" : "timeline-from-left"}`}
+      className="w-full lg:max-w-[27rem]"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateX(0)" : `translateX(${isLeft ? "60px" : "-60px"})`,
+        transition: "opacity 900ms ease-out, transform 900ms ease-out",
+      }}
     >
       {/* Icon — centrovaná nad odstavcem */}
       <div className="flex justify-center mb-3 lg:mb-4">

@@ -55,36 +55,3 @@ body {
 
 /* CSS Scroll-Driven Animations — compositor thread, žádný JS při scrollu.
    Safari 18+ / iOS 18+. Starší prohlížeče: elementy jsou normálně viditelné (no animation). */
-/* ScrollRevealText — IO přidá .words-revealed třidu na <p>,
-   každé slovo dostane svůj čas přes --word-delay CSS proměnnou. */
-.word-reveal {
-  opacity: 0;
-}
-
-.words-revealed .word-reveal {
-  animation: word-reveal 0.5s ease var(--word-delay, 0ms) both;
-}
-
-/* Timeline items — IO přidá .timeline-revealed, keyframe dohraje do konce */
-.timeline-from-right {
-  opacity: 0;
-  transform: translateX(60px);
-}
-.timeline-from-left {
-  opacity: 0;
-  transform: translateX(-60px);
-}
-.timeline-from-right.timeline-revealed {
-  animation: slide-in-from-right 0.9s ease-out both;
-}
-.timeline-from-left.timeline-revealed {
-  animation: slide-in-from-left 0.9s ease-out both;
-}
-
-/* Footer foto — IO přidá .photo-revealed, keyframe dohraje do konce */
-.footer-photo-reveal {
-  transform: translateY(300px);
-}
-.footer-photo-reveal.photo-revealed {
-  animation: photo-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
