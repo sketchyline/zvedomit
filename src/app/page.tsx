@@ -47,7 +47,7 @@ function Blob({
 
 export default function Home() {
   return (
-    <div className="relative">
+    <div className="relative max-w-[1920px] mx-auto">
 
       {/* ── Desktop blob layer (md+) ── */}
       <div
