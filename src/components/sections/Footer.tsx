@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 
 const navLinks = [
   { label: "Úvod", href: "#", bold: true },
@@ -22,6 +25,24 @@ function FooterLogo({ className }: { className?: string }) {
 }
 
 export function Footer() {
+  const photoRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = photoRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("photo-revealed");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <footer>
       {/* Photo + watermark area */}
@@ -46,8 +67,8 @@ export function Footer() {
           />
         </svg>
 
-        {/* Fotka — vyjíždí zpoza tmavé karty jak footer scrolluje do viewportu */}
-        <div className="footer-photo-reveal relative z-10 max-w-[642px] mx-auto">
+        {/* Fotka — vyjíždí zpoza tmavé karty když footer vstoupí do viewportu */}
+        <div ref={photoRef} className="footer-photo-reveal relative z-10 max-w-[642px] mx-auto">
           <Image
             src="/footer_vojta 1.png"
             alt="Vojtěch Majer"

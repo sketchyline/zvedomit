@@ -65,28 +65,26 @@ body {
   animation: word-reveal 0.5s ease var(--word-delay, 0ms) both;
 }
 
-/* Footer + Timeline — CSS Scroll-Driven Animations (blokové elementy) */
-@supports (animation-timeline: view()) {
-  .footer-photo-reveal {
-    transform: translateY(300px);
-    animation: photo-reveal linear both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 50%;
-  }
+/* Timeline items — IO přidá .timeline-revealed, keyframe dohraje do konce */
+.timeline-from-right {
+  opacity: 0;
+  transform: translateX(60px);
+}
+.timeline-from-left {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+.timeline-from-right.timeline-revealed {
+  animation: slide-in-from-right 0.9s ease-out both;
+}
+.timeline-from-left.timeline-revealed {
+  animation: slide-in-from-left 0.9s ease-out both;
+}
 
-  .timeline-from-right {
-    opacity: 0;
-    transform: translateX(60px);
-    animation: slide-in-from-right linear both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 25%;
-  }
-
-  .timeline-from-left {
-    opacity: 0;
-    transform: translateX(-60px);
-    animation: slide-in-from-left linear both;
-    animation-timeline: view();
-    animation-range: entry 0% cover 25%;
-  }
+/* Footer foto — IO přidá .photo-revealed, keyframe dohraje do konce */
+.footer-photo-reveal {
+  transform: translateY(300px);
+}
+.footer-photo-reveal.photo-revealed {
+  animation: photo-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

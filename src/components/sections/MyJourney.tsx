@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 import { ScrollRevealText } from "@/components/ScrollRevealText";
 
 interface TimelineItemData {
@@ -42,10 +45,31 @@ const timelineItems: TimelineItemData[] = [
 ];
 
 function TimelineItem({ item, isLeft }: { item: TimelineItemData; isLeft: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("timeline-revealed");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const numColor = item.color === "teal" ? "text-accent-teal" : "text-accent-green";
 
   return (
-    <div className={`w-full lg:max-w-[27rem] ${isLeft ? "timeline-from-right" : "timeline-from-left"}`}>
+    <div
+      ref={ref}
+      className={`w-full lg:max-w-[27rem] ${isLeft ? "timeline-from-right" : "timeline-from-left"}`}
+    >
       {/* Icon — centrovaná nad odstavcem */}
       <div className="flex justify-center mb-3 lg:mb-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
