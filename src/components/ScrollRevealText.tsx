@@ -35,12 +35,16 @@ export function ScrollRevealText({ text, className = "" }: ScrollRevealTextProps
       {words.map((word, i) => (
         <span
           key={i}
-          style={{
-            opacity: visible ? 1 : 0,
-            // CSS transition runs on GPU compositor — smooth regardless of JS thread.
-            // Stagger delay creates the one-word-at-a-time cascade effect.
-            transition: visible ? `opacity 0.35s ease ${i * 30}ms` : "none",
-          }}
+          style={
+            visible
+              ? {
+                  // @keyframes animation: Safari iOS-safe — keyframe explicitly defines
+                  // the "from" state so Safari doesn't need a prior paint at opacity:0.
+                  // CSS transition can fail on Safari when opacity+transition change together.
+                  animation: `word-reveal 0.4s ease ${i * 30}ms both`,
+                }
+              : { opacity: 0 }
+          }
         >
           {word}
           {i < words.length - 1 ? " " : ""}

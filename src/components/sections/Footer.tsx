@@ -73,10 +73,11 @@ export function Footer() {
         {/* Fotka — vyjíždí zpoza tmavé karty když footer vstoupí do viewportu */}
         <div
           className="relative z-10 max-w-[642px] mx-auto"
-          style={{
-            transform: photoRevealed ? "translateY(0)" : "translateY(300px)",
-            transition: photoRevealed ? "transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)" : "none",
-          }}
+          style={
+            photoRevealed
+              ? { animation: "photo-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both" }
+              : { transform: "translateY(300px)" }
+          }
         >
           <Image
             src="/footer_vojta 1.png"
