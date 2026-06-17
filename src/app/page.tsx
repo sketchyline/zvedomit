@@ -29,6 +29,7 @@ function Blob({
   return (
     <div
       aria-hidden="true"
+      className="blob-bg"
       style={{
         position: "absolute",
         top,
@@ -38,7 +39,6 @@ function Blob({
         transform: "translate(-50%, -50%) translateZ(0)",
         borderRadius: "50%",
         background: color,
-        filter: "blur(80px)",
         pointerEvents: "none",
         willChange: "transform",
       }}
@@ -54,7 +54,7 @@ export default function Home() {
       <div
         aria-hidden="true"
         className="hidden md:block absolute inset-0 overflow-hidden pointer-events-none"
-        style={{ zIndex: 0 }}
+        style={{ zIndex: 0, transform: "translateZ(0)", isolation: "isolate" }}
       >
         {/* 1. Zelený, vlevo — mezi Proč koučování a Osobní příběh */}
         <Blob cx={257} top="37%" size={936} color="#EBFFF4" />
@@ -73,7 +73,7 @@ export default function Home() {
       <div
         aria-hidden="true"
         className="md:hidden absolute inset-0 overflow-hidden pointer-events-none"
-        style={{ zIndex: 0 }}
+        style={{ zIndex: 0, transform: "translateZ(0)", isolation: "isolate" }}
       >
         {/* 1. Zelený, vlevo — začátek sekce Osobní příběh */}
         <Blob cx={100} top="38%" size={466} color="#EBFFF4" halfWidth={201} />

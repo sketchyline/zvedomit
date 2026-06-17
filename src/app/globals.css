@@ -53,5 +53,12 @@ body {
   to   { opacity: 1; transform: translateX(0); }
 }
 
-/* CSS Scroll-Driven Animations — compositor thread, žádný JS při scrollu.
-   Safari 18+ / iOS 18+. Starší prohlížeče: elementy jsou normálně viditelné (no animation). */
+/* Blob background filters — mobile reduced radius keeps GPU load low during scroll */
+.blob-bg {
+  filter: blur(30px);
+}
+@media (min-width: 768px) {
+  .blob-bg {
+    filter: blur(80px);
+  }
+}
