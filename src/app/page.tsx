@@ -48,7 +48,7 @@ function Blob({
 
 export default function Home() {
   return (
-    <div className="relative max-w-[1920px] mx-auto">
+    <div className="relative">
 
       {/* ── Desktop blob layer (md+) ── */}
       <div
@@ -88,7 +88,7 @@ export default function Home() {
       </div>
 
       {/* ── Content layer — nad bloby ── */}
-      <div style={{ position: "relative", zIndex: 1 }}>
+      <div className="max-w-[1920px] mx-auto" style={{ position: "relative", zIndex: 1 }}>
         <Navigation />
         <main>
           <Hero />

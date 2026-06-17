@@ -70,7 +70,7 @@ export function Hero() {
           </h1>
 
           {/* Photo — md to xl (in flow, above column bubbles) */}
-          <div className="xl:hidden relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,580px)]">
+          <div className="xl:hidden relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,660px)]">
             <div
               className="w-full overflow-hidden"
               style={{ maxHeight: `calc(100vh - ${NAV_HEIGHT}px - 11rem)` }}
@@ -94,7 +94,7 @@ export function Hero() {
 
         {/* Photo + xl+ bubbles — absolute bottom-0, vždy přilne ke spodní hraně hero */}
         <div
-          className="hidden xl:block absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,580px)]"
+          className="hidden xl:block absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,660px)]"
         >
           {/* max-height zabrání překryvu nadpisu na krátkých viewportech */}
           <div
