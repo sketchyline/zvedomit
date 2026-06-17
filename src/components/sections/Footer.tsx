@@ -144,7 +144,7 @@ export function Footer() {
             </div>
           </div>
 
-          <p className="mt-12 text-white text-[clamp(1.5rem,2.2vw,3rem)] font-normal leading-tight whitespace-nowrap">
+          <p className="mt-12 text-white text-[clamp(1.5rem,2.8vw,3.5rem)] font-normal leading-tight whitespace-nowrap">
             Nejlepší rada je totiž ta, kterou si dáte sami.
           </p>
 
