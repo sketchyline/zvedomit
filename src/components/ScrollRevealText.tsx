@@ -8,41 +8,49 @@ interface ScrollRevealTextProps {
 }
 
 export function ScrollRevealText({ text, className = "" }: ScrollRevealTextProps) {
-  const ref = useRef<HTMLParagraphElement>(null);
-  const [visible, setVisible] = useState(false);
+  const spanRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const [revealed, setRevealed] = useState<ReadonlySet<number>>(new Set());
+  const words = text.split(" ");
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    // IntersectionObserver runs on the compositor thread — fires reliably on iOS
-    // even during fast momentum scroll, unlike scroll events which iOS throttles.
+    const spans = spanRefs.current.filter((s): s is HTMLSpanElement => s !== null);
+    if (!spans.length) return;
+
+    // One observer watching every word span individually.
+    // When each word enters the viewport, it animates in independently.
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
+      (entries) => {
+        const toReveal: number[] = [];
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const idx = spans.indexOf(entry.target as HTMLSpanElement);
+          if (idx >= 0) toReveal.push(idx);
+          observer.unobserve(entry.target);
+        });
+        if (toReveal.length > 0) {
+          setRevealed((prev) => {
+            const next = new Set(prev);
+            toReveal.forEach((i) => next.add(i));
+            return next;
+          });
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.1 }
     );
-    observer.observe(el);
+
+    spans.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
   }, []);
 
-  const words = text.split(" ");
   return (
-    <p ref={ref} className={className}>
+    <p className={className}>
       {words.map((word, i) => (
         <span
           key={i}
+          ref={(el) => { spanRefs.current[i] = el; }}
           style={
-            visible
-              ? {
-                  // @keyframes animation: Safari iOS-safe — keyframe explicitly defines
-                  // the "from" state so Safari doesn't need a prior paint at opacity:0.
-                  // CSS transition can fail on Safari when opacity+transition change together.
-                  animation: `word-reveal 0.4s ease ${i * 30}ms both`,
-                }
+            revealed.has(i)
+              ? { animation: "word-reveal 0.4s ease both" }
               : { opacity: 0 }
           }
         >
