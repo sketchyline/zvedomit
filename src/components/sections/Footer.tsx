@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
 
 const navLinks = [
   { label: "Úvod", href: "#", bold: true },
@@ -25,31 +22,10 @@ function FooterLogo({ className }: { className?: string }) {
 }
 
 export function Footer() {
-  const photoContainerRef = useRef<HTMLDivElement>(null);
-  const [photoRevealed, setPhotoRevealed] = useState(false);
-
-  useEffect(() => {
-    const el = photoContainerRef.current;
-    if (!el) return;
-    // IntersectionObserver fires on compositor thread — reliable on iOS.
-    // CSS transition handles the smooth slide-up (GPU, no scroll events needed).
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setPhotoRevealed(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <footer>
       {/* Photo + watermark area */}
-      <div ref={photoContainerRef} className="relative overflow-hidden">
+      <div className="relative overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           aria-hidden="true"
@@ -70,15 +46,8 @@ export function Footer() {
           />
         </svg>
 
-        {/* Fotka — vyjíždí zpoza tmavé karty když footer vstoupí do viewportu */}
-        <div
-          className="relative z-10 max-w-[642px] mx-auto"
-          style={
-            photoRevealed
-              ? { animation: "photo-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both" }
-              : { transform: "translateY(300px)" }
-          }
-        >
+        {/* Fotka — vyjíždí zpoza tmavé karty jak footer scrolluje do viewportu */}
+        <div className="footer-photo-reveal relative z-10 max-w-[642px] mx-auto">
           <Image
             src="/footer_vojta 1.png"
             alt="Vojtěch Majer"
