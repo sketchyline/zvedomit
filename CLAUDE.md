@@ -44,6 +44,14 @@ Navigation → Hero → WhyZvedomit → MyJourney → Testimonials → Contact �
 
 Blob horizontal positioning: `left: calc(50% - ${halfWidth}px + ${cx}px)` where `halfWidth` is 960 for desktop (1920px design) and 201 for mobile (402px design). Desktop and mobile blobs are separate layers toggled with `hidden md:block` / `md:hidden`.
 
+**GPU performance:** Each blob has `transform: "translate(-50%,-50%) translateZ(0)"` and `willChange: "transform"` — promotes each blob to its own compositor layer so `filter: blur()` is cached rather than recomputed on every scroll frame. Both parent blob containers have `transform: "translateZ(0)"` and `isolation: "isolate"` — creates a single composite layer for the whole group, preventing blob repaints from affecting the rest of the page.
+
+**Blur radius is responsive** via CSS class `.blob-bg` in `globals.css`:
+- Mobile (< 768px): `blur(30px)` — reduced GPU load during scroll
+- Desktop (md+): `blur(80px)` — full visual quality
+
+Do **not** add `backdrop-filter` / `backdrop-blur` anywhere — even on non-sticky elements it creates extra compositor layers. On sticky/fixed elements (like the nav) it forces the browser to repaint the entire area below on every scroll frame, causing severe jank on iOS Safari.
+
 ## Design Tokens
 
 Defined in `tailwind.config.ts`:
@@ -73,9 +81,11 @@ Typography scale:
 
 ## Key Implementation Details
 
-### Navigation — frosted glass
+### Navigation
 
-`backdrop-blur-md` is intentionally on an **inner child div**, not on `<nav>` itself. `backdrop-filter` on an element makes `position: fixed` descendants position relative to that element instead of the viewport — the mobile fullscreen overlay would only cover the 65px nav bar. The `<nav>` element itself has no `backdrop-filter`, so `fixed inset-0` on the overlay works correctly.
+Nav uses `sticky top-0 z-50`. Background is a plain `bg-white/90` inner div — **no `backdrop-filter`/`backdrop-blur`**. Frosted glass was removed because `backdrop-filter` on a sticky element forces iOS Safari to repaint the entire viewport below it on every scroll frame.
+
+The background div is still on a **child element** (not `<nav>` itself) because `backdrop-filter` on an element would make `position: fixed` descendants position relative to it — which would break the mobile fullscreen overlay. Even without blur, keeping the background on a child preserves this safe structure.
 
 - Desktop nav height: **65px** (logo 33px + `py-4` 32px) — used as `NAV_HEIGHT` in Hero
 - Mobile nav height: **58px** (logo 26px + `py-4` 32px)
@@ -113,11 +123,15 @@ The wrapper is inside the outer photo container but the absolutely-positioned bu
 
 ### ScrollRevealText
 
-`src/components/ScrollRevealText.tsx` — word-by-word opacity reveal driven by scroll position.
+`src/components/ScrollRevealText.tsx` — word-by-word opacity reveal triggered by IntersectionObserver.
 
-- Reveal starts when element top reaches 85% of viewport height
-- `setProgress(prev => Math.max(prev, next))` — progress only ever increases; words stay visible when scrolling back up
+- Single IO observer on the `<p>` element; fires once when 15% of it enters the viewport, then disconnects
+- All words fade in with CSS `transition-delay` stagger: **30 ms/word** for > 30 words, **40 ms** for > 20, **55 ms** otherwise (caps total cascade at ~1.5 s)
+- One-way: words never hide again (`observer.disconnect()` after trigger)
+- `prefers-reduced-motion`: all words shown instantly with no transition
 - Used in `MyJourney` for the Vojta quote blockquote
+
+**Do not** revert to scroll-event + `getBoundingClientRect()` — iOS Safari throttles scroll events during momentum scrolling, causing stale rect values and frozen animations.
 
 ### WhyZvedomit — sticky photo + equal-height cards
 
@@ -127,14 +141,39 @@ Photo wrapper uses `lg:sticky lg:top-[85px]`. The section itself has `lg:pb-0`; 
 
 ### MyJourney — timeline animation
 
-`TimelineItem` uses `IntersectionObserver` with `threshold: 0.25`. The observer **stays connected** (bidirectional) — items slide out when scrolling up. Left items (even index) slide in from the right (+60px), right items from the left (-60px).
+`TimelineItem` uses `IntersectionObserver` with `threshold: 0.25`. One-way: `observer.disconnect()` after first trigger — items never slide back out when scrolling up.
+
+- Left items (even index, `isLeft: true`): slide in from right (`+60px`), animate immediately on trigger
+- Right items (odd index): slide in from left (`−60px`), 100 ms delay — staggers paired items within the same grid row
+- Transition: `opacity 900ms ease-out, transform 900ms ease-out`
+- `prefers-reduced-motion`: items shown instantly
 
 ### Testimonials — 3-card peek carousel
 
 State: `activeIndex` (default 1 = center card). Mobile uses `overflow-hidden -mx-5` with `justify-center` — side cards peek in from edges. Inactive cards get a `bg-white/[0.72]` overlay.
 
-### Footer — scroll-driven photo reveal
+### Footer — photo reveal + tagline
 
-Photo starts at `translateY(300px)` and animates to `translateY(0)` as the footer scrolls into view. Dark card overlaps the photo by 50px (`-mt-[50px] relative z-10`) — intentionally covers feet but leaves hands visible.
+**Photo animation:** starts at `translateY(300px)`, animates to `translateY(0)` triggered by IntersectionObserver on the photo wrapper div.
+- One-way: `observer.disconnect()` after trigger — photo stays up when scrolling back
+- Trigger: `rootMargin: "0px 0px 150px 0px"` — fires when photo is 150px below the viewport edge (slightly before the footer enters view)
+- Duration: `1.5s cubic-bezier(0.22, 1, 0.36, 1)`
+- `prefers-reduced-motion`: photo shown instantly at `translateY(0)`
+
+**Dark card** overlaps the photo by 50px (`-mt-[50px] relative z-10`) — intentionally covers feet but leaves hands visible.
+
+**Desktop tagline:** `text-[clamp(1.5rem,3.5vw,4.5rem)] whitespace-nowrap text-center`
 
 `footer-logo.svg` — no spaces in filename (Linux/Vercel case-sensitive). SVG images need `unoptimized` prop on `next/image`.
+
+### Scroll restoration
+
+`layout.tsx` `<head>` contains an inline script that runs before React hydration:
+
+```js
+history.scrollRestoration = "manual";
+window.scrollTo(0, 0);
+window.addEventListener("pageshow", function(e) { if (e.persisted) window.scrollTo(0, 0) });
+```
+
+`history.scrollRestoration = "manual"` prevents the browser from restoring scroll position on refresh. The `pageshow` listener handles iOS Safari's bfcache (Back-Forward Cache) — when a page is restored from bfcache, `pageshow` fires with `e.persisted = true` and the page scrolls back to top.
