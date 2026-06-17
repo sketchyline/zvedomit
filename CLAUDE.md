@@ -30,15 +30,31 @@ Single-page marketing site. One route (`src/app/page.tsx`) renders all sections 
 Navigation → Hero → WhyZvedomit → MyJourney → Testimonials → Contact → Footer
 ```
 
-### page.tsx — blob background layer
+### page.tsx — layout structure
 
-`page.tsx` owns the full-page background decoration (5 blurred CSS blobs). The layering is:
+`page.tsx` owns the full-page background decoration (5 blurred CSS blobs) and controls which sections are full-width vs. max-width constrained. The structure is:
 
 ```tsx
-<div className="relative">
-  <div style={{ zIndex: 0 }}>  {/* blob layer — absolute, inset-0 */}
-  <div style={{ zIndex: 1 }}>  {/* content layer — all sections */}
+<div className="relative">                         {/* full viewport width */}
+  <div style={{ zIndex: 0 }}>                      {/* blob layer — absolute inset-0, full width */}
+  <div style={{ zIndex: 1 }}>                      {/* content layer */}
+    <Navigation />                                  {/* full width */}
+    <main>
+      <Hero />                                      {/* full width */}
+      <div className="max-w-[1920px] mx-auto">      {/* centered, transparent sections */}
+        <WhyZvedomit /><MyJourney />...
+      </div>
+    </main>
+    <div className="max-w-[1920px] mx-auto">        {/* footer centered */}
+      <Footer />
+    </div>
+  </div>
+</div>
 ```
+
+**Why Navigation and Hero are full-width:** Hero has `bg-background` (white) + `overflow-hidden` with its own SVG background (`Hero Background.svg`). If Hero is inside a `max-w-[1920px]` wrapper, the SVG gradient is clipped at 1920px and wider viewports see white gutters. Navigation is full-width so its `bg-white/90` background extends edge to edge.
+
+**Why middle sections use max-w-[1920px]:** WhyZvedomit, MyJourney, Testimonials, Contact are transparent — page-level blobs show through them. Content is already horizontally bounded by `px-[var(--px)]` padding; the max-w prevents layouts from stretching unusably wide on very large monitors.
 
 **Critical:** blobs use `z-index: 0`, content uses `z-index: 1`. Using `z-index: -1` on blobs would hide them behind `body`'s stacking context. Sections that should let blobs show through must have **no** `bg-*` class (WhyZvedomit, MyJourney, Testimonials, Contact, Footer photo area).
 
@@ -98,7 +114,7 @@ Bubbles fly in automatically on page load using CSS `animation-delay`, **not** s
 const BUBBLE_DELAYS = [500, 900, 1300]; // ms after page load
 ```
 
-**Desktop (≥md):** Section is `height: calc(100vh - 65px)`, bubbles positioned absolutely around the photo.
+**Desktop (≥md):** Section is `height: calc(100vh - 65px)`, full viewport width, bubbles positioned absolutely around the photo.
 
 - `xl+` (≥1280px): 3 bubbles absolutely positioned around photo (`left-[-34%]`, `left-[71%]`, `left-[83%]`)
 - `md–xl`: 3 bubbles in a column below the photo (in-flow)
@@ -113,7 +129,7 @@ const BUBBLE_DELAYS = [500, 900, 1300]; // ms after page load
 
 The wrapper is inside the outer photo container but the absolutely-positioned bubbles are **siblings** of the wrapper (not inside it), so `overflow: hidden` does not clip them. Bubble `top` percentages are computed against the outer container's constrained height.
 
-**Photo file:** `vojta_standing_2.png` is landscape (2528×1684). Portrait crop is achieved via `style={{ aspectRatio: "658/836" }}` + `object-cover object-[45%_top]`.
+**Photo file:** `vojta_standing_2.png` is landscape (2528×1684). Portrait crop is achieved via `style={{ aspectRatio: "658/836" }}` + `object-cover object-[45%_top]`. Photo container width: `clamp(280px, 36vw, 660px)` — applied to both the md–xl and xl+ layouts.
 
 **Z-index in xl+ layout:**
 - Bubble "Jen si to..." at `z-0` → appears **behind** photo (z-10) — peeks from behind Vojta's head
