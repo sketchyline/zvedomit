@@ -26,20 +26,24 @@ function FooterLogo({ className }: { className?: string }) {
 
 export function Footer() {
   const photoContainerRef = useRef<HTMLDivElement>(null);
-  const [photoY, setPhotoY] = useState(300);
+  const [photoRevealed, setPhotoRevealed] = useState(false);
 
   useEffect(() => {
-    function update() {
-      const el = photoContainerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.75)));
-      setPhotoY(Math.round((1 - progress) * 300));
-    }
-    window.addEventListener("scroll", update, { passive: true });
-    update();
-    return () => window.removeEventListener("scroll", update);
+    const el = photoContainerRef.current;
+    if (!el) return;
+    // IntersectionObserver fires on compositor thread — reliable on iOS.
+    // CSS transition handles the smooth slide-up (GPU, no scroll events needed).
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setPhotoRevealed(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -66,10 +70,13 @@ export function Footer() {
           />
         </svg>
 
-        {/* Fotka — vyjíždí zpoza tmavé karty při scrollu */}
+        {/* Fotka — vyjíždí zpoza tmavé karty když footer vstoupí do viewportu */}
         <div
           className="relative z-10 max-w-[642px] mx-auto"
-          style={{ transform: `translateY(${photoY}px)` }}
+          style={{
+            transform: photoRevealed ? "translateY(0)" : "translateY(300px)",
+            transition: photoRevealed ? "transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)" : "none",
+          }}
         >
           <Image
             src="/footer_vojta 1.png"
