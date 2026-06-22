@@ -44,6 +44,9 @@ const config: Config = {
       animation: {
         "bubble-in": "bubble-in 600ms cubic-bezier(0.22, 1, 0.36, 1) both",
       },
+      screens: {
+        tall: { raw: "(min-height: 850px)" },
+      },
     },
   },
   plugins: [],

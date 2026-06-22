@@ -54,7 +54,7 @@ export function Hero() {
       {/* ─── DESKTOP ─── */}
       <section
         className="hidden md:block relative overflow-hidden bg-background"
-        style={{ height: `calc(100vh - ${NAV_HEIGHT}px)` }}
+        style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT}px)` }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img aria-hidden="true" src="/Hero Background.svg" alt=""
@@ -69,8 +69,8 @@ export function Hero() {
             Máte to v sobě
           </h1>
 
-          {/* Photo — md to xl (in flow, above column bubbles) */}
-          <div className="xl:hidden relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,660px)]">
+          {/* Photo — md to xl (in flow, above column bubbles); also shown on xl+ when viewport is short */}
+          <div className="tall:xl:hidden relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,660px)]">
             <div
               className="w-full overflow-hidden"
               style={{ maxHeight: `calc(100vh - ${NAV_HEIGHT}px - 11rem)` }}
@@ -81,8 +81,8 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Column bubbles — md to xl */}
-          <div className="xl:hidden flex flex-col gap-3 mt-6 pb-12">
+          {/* Column bubbles — md to xl; also shown on xl+ when viewport is short */}
+          <div className="tall:xl:hidden flex flex-col gap-3 mt-6 pb-12">
             {bubbles.map((text, i) => (
               <div key={text} className="w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
                 style={{ animationDelay: `${BUBBLE_DELAYS[i]}ms` }}>
@@ -92,18 +92,15 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Photo + xl+ bubbles — absolute bottom-0, vždy přilne ke spodní hraně hero */}
+        {/* Photo + xl+ bubbles — absolute bottom-0, only on xl+ with tall viewport */}
         <div
-          className="hidden xl:block absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,660px)]"
+          className="hidden xl:hidden tall:xl:block absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,660px)]"
+          style={{ height: `calc(100dvh - ${NAV_HEIGHT}px - 12rem)` }}
         >
-          {/* max-height zabrání překryvu nadpisu na krátkých viewportech */}
-          <div
-            className="w-full overflow-hidden"
-            style={{ maxHeight: `calc(100vh - ${NAV_HEIGHT}px - 11rem)` }}
-          >
+          <div className="w-full h-full overflow-hidden">
             <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
-              width={2528} height={1684} className="relative z-10 w-full h-auto object-cover object-[45%_top]"
-              style={{ aspectRatio: "658/836" }} priority />
+              width={2528} height={1684} className="relative z-10 w-full h-full object-cover object-[45%_top]"
+              priority />
           </div>
 
           <div className="absolute left-[-34%] top-[60%] z-0 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
