@@ -54,7 +54,7 @@ export function Hero() {
       {/* ─── DESKTOP ─── */}
       <section
         className="hidden md:block relative overflow-hidden bg-background"
-        style={{ minHeight: `max(calc(100dvh - ${NAV_HEIGHT}px), 720px)` }}
+        style={{ minHeight: `max(calc(100dvh - ${NAV_HEIGHT}px), calc(clamp(280px, 36vw, 660px) * 1.271 + 11rem))` }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img aria-hidden="true" src="/Hero Background.svg" alt=""
