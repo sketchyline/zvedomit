@@ -114,26 +114,36 @@ Bubbles fly in automatically on page load using CSS `animation-delay`, **not** s
 const BUBBLE_DELAYS = [500, 900, 1300]; // ms after page load
 ```
 
-**Desktop (≥md):** Section is `height: calc(100vh - 65px)`, full viewport width, bubbles positioned absolutely around the photo.
+**Desktop (≥md):** Section uses `minHeight` (not `height`) so content can grow on short viewports:
 
-- `xl+` (≥1280px): 3 bubbles absolutely positioned around photo (`left-[-34%]`, `left-[71%]`, `left-[83%]`)
-- `md–xl`: 3 bubbles in a column below the photo (in-flow)
-
-**Photo height constraint** — at short viewports (13" laptops ~700px tall), the portrait-cropped landscape photo overflows. An inner wrapper constrains it:
-
-```tsx
-<div style={{ maxHeight: `calc(100vh - 65px - 11rem)`, overflow: 'hidden' }}>
-  <Image ... />
-</div>
+```
+minHeight: max(calc(100dvh - 65px), calc(clamp(280px, 36vw, 660px) * 1.271 + 11rem))
 ```
 
-The wrapper is inside the outer photo container but the absolutely-positioned bubbles are **siblings** of the wrapper (not inside it), so `overflow: hidden` does not clip them. Bubble `top` percentages are computed against the outer container's constrained height.
+The second term ensures the section is always tall enough to show `heading (≈11rem) + full portrait photo` side by side without overlap. `1.271 ≈ 836/658` is the photo aspect ratio inverse. `dvh` avoids iOS Safari mobile-bar jank.
 
-**Photo file:** `vojta_standing_2.png` is landscape (2528×1684). Portrait crop is achieved via `style={{ aspectRatio: "658/836" }}` + `object-cover object-[45%_top]`. Photo container width: `clamp(280px, 36vw, 660px)` — applied to both the md–xl and xl+ layouts.
+- `xl+` (≥1280px): 3 bubbles absolutely positioned around photo (see Z-index section below)
+- `md–xl`: 3 bubbles in a column below the photo (in-flow)
+
+**xl+ photo block** (`hidden xl:block absolute bottom-0 left-1/2 -translate-x-1/2`):
+
+The block has `style={{ aspectRatio: "658/836" }}` — its height is derived from its width (`clamp(280px, 36vw, 660px)`) via CSS `aspect-ratio`, **not** from the viewport height. This is critical: bubble `top` percentages are computed against the block's height = photo's natural height, so they stay visually stable regardless of viewport height.
+
+Inside the block there is a single `relative w-full h-full` wrapper that is the **containing block for all three bubbles**. The photo image (`h-full w-full object-cover object-[45%_top]`) fills this wrapper. All bubbles are children of this wrapper (not siblings), so their `position: absolute` + `top: %` values always resolve against photo height.
+
+```
+Do NOT move bubbles outside the relative wrapper — top:% on a sibling of the
+photo would resolve against the outer section height, causing bubbles to shift
+when viewport height changes.
+```
+
+**Photo file:** `vojta_standing_2.png` is landscape (2528×1684). Portrait crop is achieved via `object-cover object-[45%_top]` in a container that has `aspectRatio: "658/836"`. Photo container width: `clamp(280px, 36vw, 660px)`.
 
 **Z-index in xl+ layout:**
-- Bubble "Jen si to..." at `z-0` → appears **behind** photo (z-10) — peeks from behind Vojta's head
+- Bubble "Jen si to..." at `z-0`, `left-[-220px]` (fixed px, not %) → appears **behind** photo (z-10). Fixed pixel offset ensures exactly 220px of the card is visible and 60px peeks behind Vojta's arm on any display width. Do **not** change back to a percentage — percentage scales with photo width, pushing the bubble fully off-screen on wide displays.
 - Other two bubbles at `z-20` → appear in **front** of photo
+
+**Short viewports (e.g. Windows 150% scaling = 1280×720 CSS px):** The section grows past the viewport fold (hero bottom ~107px below fold). This is intentional — the full portrait photo + heading cannot geometrically fit in 655px available height. Bubbles remain correctly positioned; the page scrolls slightly to reveal the photo bottom (hands).
 
 **Mobile (below md):** Section uses `aspectRatio: "403 / 765"` (natural height, not sticky). Same bubble delays apply.
 
