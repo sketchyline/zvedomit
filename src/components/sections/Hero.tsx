@@ -103,7 +103,7 @@ export function Hero() {
               width={2528} height={1684} className="relative z-10 w-full h-full object-cover object-[45%_top]"
               priority />
 
-            <div className="absolute left-[-50%] top-[60%] z-0 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
+            <div className="absolute left-[-220px] top-[60%] z-0 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
               style={{ animationDelay: `${BUBBLE_DELAYS[0]}ms` }}>
               <p className="text-body text-left">{bubbles[0]}</p>
             </div>
