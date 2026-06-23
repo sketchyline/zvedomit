@@ -54,7 +54,7 @@ export function Hero() {
       {/* ─── DESKTOP ─── */}
       <section
         className="hidden md:block relative overflow-hidden bg-background"
-        style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT}px)` }}
+        style={{ minHeight: `max(calc(100dvh - ${NAV_HEIGHT}px), 720px)` }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img aria-hidden="true" src="/Hero Background.svg" alt=""
@@ -92,31 +92,29 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Photo + xl+ bubbles — absolute bottom-0, aktivní na všech xl+ obrazovkách */}
+        {/* Photo + xl+ bubbles — sized by photo aspect ratio, not viewport height */}
         <div
           className="hidden xl:block absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,660px)]"
-          style={{ height: `calc(100dvh - ${NAV_HEIGHT}px - 12rem)` }}
+          style={{ aspectRatio: "658/836" }}
         >
-          <div
-            className="w-full overflow-hidden"
-            style={{ maxHeight: `calc(100dvh - ${NAV_HEIGHT}px - 12rem)` }}
-          >
+          {/* relative wrapper = containing block for bubbles; top:% is always % of photo height */}
+          <div className="relative w-full h-full">
             <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
-              width={2528} height={1684} className="relative z-10 w-full h-auto object-cover object-[45%_top]"
-              style={{ aspectRatio: "658/836" }} priority />
-          </div>
+              width={2528} height={1684} className="relative z-10 w-full h-full object-cover object-[45%_top]"
+              priority />
 
-          <div className="absolute left-[-34%] top-[60%] z-0 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
-            style={{ animationDelay: `${BUBBLE_DELAYS[0]}ms` }}>
-            <p className="text-body text-left">{bubbles[0]}</p>
-          </div>
-          <div className="absolute left-[71%] top-[39%] z-20 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
-            style={{ animationDelay: `${BUBBLE_DELAYS[1]}ms` }}>
-            <p className="text-body text-left">{bubbles[1]}</p>
-          </div>
-          <div className="absolute left-[83%] top-[69%] z-20 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
-            style={{ animationDelay: `${BUBBLE_DELAYS[2]}ms` }}>
-            <p className="text-body text-left">{bubbles[2]}</p>
+            <div className="absolute left-[-34%] top-[60%] z-0 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
+              style={{ animationDelay: `${BUBBLE_DELAYS[0]}ms` }}>
+              <p className="text-body text-left">{bubbles[0]}</p>
+            </div>
+            <div className="absolute left-[71%] top-[39%] z-20 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
+              style={{ animationDelay: `${BUBBLE_DELAYS[1]}ms` }}>
+              <p className="text-body text-left">{bubbles[1]}</p>
+            </div>
+            <div className="absolute left-[83%] top-[69%] z-20 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
+              style={{ animationDelay: `${BUBBLE_DELAYS[2]}ms` }}>
+              <p className="text-body text-left">{bubbles[2]}</p>
+            </div>
           </div>
         </div>
 
