@@ -47,7 +47,7 @@ export function Navigation() {
       <div className="absolute inset-0 bg-white/90 pointer-events-none" aria-hidden="true" />
 
       {/* Nav bar content */}
-      <div className="relative flex items-center justify-between px-5 md:px-[var(--px)] py-4">
+      <div className="relative flex items-center justify-between px-5 xl:px-[var(--px)] py-4">
 
         {/* Logo */}
         <a href="/" aria-label="zvědomit – domů">
@@ -57,17 +57,17 @@ export function Navigation() {
             alt="zvědomit"
             width={171}
             height={33}
-            className="h-[26px] w-auto md:h-[33px]"
+            className="h-[26px] w-auto xl:h-[33px]"
           />
         </a>
 
         {/* Desktop nav links */}
-        <ul className="hidden md:flex items-center gap-12 list-none">
+        <ul className="hidden md:flex items-center gap-5 lg:gap-7 xl:gap-12 list-none">
           {navLinks.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
-                className="text-base text-muted hover:text-foreground transition-colors duration-150"
+                className="text-sm xl:text-base text-muted hover:text-foreground transition-colors duration-150 whitespace-nowrap"
               >
                 {link.label}
               </a>
@@ -78,7 +78,7 @@ export function Navigation() {
         {/* Desktop CTA button */}
         <a
           href="#kontakt"
-          className="hidden md:inline-block bg-foreground text-background text-base rounded-full px-10 py-3 hover:opacity-80 transition-opacity duration-150"
+          className="hidden md:inline-block bg-foreground text-background text-sm xl:text-base rounded-full px-6 py-2 xl:px-10 xl:py-3 hover:opacity-80 transition-opacity duration-150 whitespace-nowrap"
         >
           Pojďme začít
         </a>
