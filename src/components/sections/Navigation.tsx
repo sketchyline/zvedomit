@@ -47,7 +47,7 @@ export function Navigation() {
       <div className="absolute inset-0 bg-white/90 pointer-events-none" aria-hidden="true" />
 
       {/* Nav bar content */}
-      <div className="relative flex items-center justify-between px-5 md:px-8 lg:px-12 xl:px-[var(--px)] py-4">
+      <div className="relative flex items-center justify-between px-5 md:px-8 md:max-w-[860px] md:mx-auto lg:px-12 xl:max-w-none xl:mx-0 xl:px-[var(--px)] py-4">
 
         {/* Logo */}
         <a href="/" aria-label="zvědomit – domů">
