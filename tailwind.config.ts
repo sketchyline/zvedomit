@@ -46,6 +46,7 @@ const config: Config = {
       },
       screens: {
         tall: { raw: "(min-height: 850px)" },
+        "photo-xl": "1123px",
       },
     },
   },

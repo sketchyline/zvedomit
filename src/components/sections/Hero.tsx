@@ -69,8 +69,8 @@ export function Hero() {
             Máte to v sobě
           </h1>
 
-          {/* Photo — md to ~1123px (in flow, above column bubbles) */}
-          <div className="min-[1123px]:hidden relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,660px)]">
+          {/* Photo — md to photo-xl (in flow, above column bubbles) */}
+          <div className="photo-xl:hidden relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,660px)]">
             <div
               className="w-full overflow-hidden"
               style={{ maxHeight: `calc(100vh - ${NAV_HEIGHT}px - 11rem)` }}
@@ -81,8 +81,8 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Column bubbles — md to ~1123px */}
-          <div className="min-[1123px]:hidden flex flex-col gap-3 mt-6 pb-12">
+          {/* Column bubbles — md to photo-xl */}
+          <div className="photo-xl:hidden flex flex-col gap-3 mt-6 pb-12">
             {bubbles.map((text, i) => (
               <div key={text} className="w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
                 style={{ animationDelay: `${BUBBLE_DELAYS[i]}ms` }}>
@@ -94,7 +94,7 @@ export function Hero() {
 
         {/* Photo + surrounding bubbles — sized by photo aspect ratio, not viewport height */}
         <div
-          className="hidden min-[1123px]:block absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,660px)]"
+          className="hidden photo-xl:block absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,660px)]"
           style={{ aspectRatio: "658/836" }}
         >
           {/* relative wrapper = containing block for bubbles; top:% is always % of photo height */}
