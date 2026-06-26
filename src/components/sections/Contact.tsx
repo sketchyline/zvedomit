@@ -48,7 +48,7 @@ export function Contact() {
               KONTAKT
             </p>
             <h2 className="text-h2 font-medium text-foreground leading-none mb-10">
-              Pojďme<br />si promluvit
+              Kam dál?
             </h2>
             <div className="flex flex-col gap-4 max-w-[408px]">
               {paragraphs.map((text, i) => (
@@ -91,7 +91,7 @@ export function Contact() {
             KONTAKT
           </p>
           <h2 className="text-[3rem] font-medium text-foreground leading-tight mb-6">
-            Pojďme<br />si promluvit
+            Kam dál?
           </h2>
           <div className="flex flex-col gap-3 mb-10">
             {paragraphs.map((text, i) => (
