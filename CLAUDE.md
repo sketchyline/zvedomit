@@ -174,6 +174,14 @@ Photo wrapper uses `lg:sticky lg:top-[85px]`. The section itself has `lg:pb-0`; 
 - Transition: `opacity 900ms ease-out, transform 900ms ease-out`
 - `prefers-reduced-motion`: items shown instantly
 
+### Contact — two-column layout with contact items
+
+Desktop (`lg+`): flex row — left column has label + heading (`Kam dál?`) + body paragraphs, right column has contact items (`ContactItem`) bottom-aligned via `justify-end`. Mobile: single column, same content stacked.
+
+`ContactItem` renders icon + bold label + linked value. Contact methods: phone (`tel:`), email (`mailto:`), WhatsApp (`https://wa.me/...`). Desktop shows phone+email in a wrapped row, WhatsApp below; mobile lists all three vertically.
+
+Section has `id="kontakt"` for nav anchor. No animations or state — pure server component.
+
 ### Testimonials — 3-card peek carousel
 
 State: `activeIndex` (default 1 = center card). Mobile uses `overflow-hidden -mx-5` with `justify-center` — side cards peek in from edges. Inactive cards get a `bg-white/[0.72]` overlay.
