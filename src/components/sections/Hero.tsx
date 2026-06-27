@@ -54,7 +54,7 @@ export function Hero() {
       {/* ─── DESKTOP (md+) ─── */}
       <section
         className="hidden md:block relative overflow-hidden bg-background"
-        style={{ minHeight: `max(calc(100dvh - ${NAV_HEIGHT}px), calc(clamp(280px, 36vw, 660px) * 1.271 + 11rem))` }}
+        style={{ height: `calc(100dvh - ${NAV_HEIGHT}px)` }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img aria-hidden="true" src="/Hero Background.svg" alt=""
@@ -70,9 +70,14 @@ export function Hero() {
         </div>
 
         {/* Photo + surrounding bubbles — single proportional composition for all md+ */}
+        {/* Width: whichever is smaller — vw-based cap or dvh-based fit (nav 65px + heading ~150px = 215px overhead) */}
         <div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,660px)]"
-          style={{ aspectRatio: "658/836", containerType: "inline-size" }}
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10"
+          style={{
+            width: `min(clamp(280px, 36vw, 660px), calc((100dvh - ${NAV_HEIGHT + 150}px) * 0.7871))`,
+            aspectRatio: "658/836",
+            containerType: "inline-size",
+          }}
         >
           {/* relative wrapper = containing block; top:% resolves against photo height */}
           <div className="relative w-full h-full">
