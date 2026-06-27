@@ -114,38 +114,59 @@ Bubbles fly in automatically on page load using CSS `animation-delay`, **not** s
 const BUBBLE_DELAYS = [500, 900, 1300]; // ms after page load
 ```
 
-**Desktop (≥md):** Section uses `minHeight` (not `height`) so content can grow on short viewports:
+**Desktop (≥md) — single proportional layout:** There is no breakpoint-based layout switch. The same photo+bubbles composition is used for all `md+` viewports, just proportionally smaller or larger.
+
+Section height is exactly `calc(100dvh - 65px)` — fills the viewport below the nav, always.
+
+**Photo sizing — dual constraint:**
 
 ```
-minHeight: max(calc(100dvh - 65px), calc(clamp(280px, 36vw, 660px) * 1.271 + 11rem))
+width: min(clamp(280px, 36vw, 660px), calc((100dvh - 215px) * 0.7871))
 ```
 
-The second term ensures the section is always tall enough to show `heading (≈11rem) + full portrait photo` side by side without overlap. `1.271 ≈ 836/658` is the photo aspect ratio inverse. `dvh` avoids iOS Safari mobile-bar jank.
+- `clamp(280px, 36vw, 660px)` — width-based cap (same as original design)
+- `calc((100dvh - 215px) * 0.7871)` — height-based cap: available viewport height minus nav (65px) and heading space (~150px), multiplied by `658/836` (photo aspect ratio) to get the max width that fits without overflow
+- `0.7871 = 658/836` (photo aspect ratio — width/height)
+- On tall viewports (>~760px): width constraint wins → same as original design
+- On short viewports (e.g. Dell Latitude 5430 at 150% Windows scaling: 1280×580 CSS px): height constraint wins → photo shrinks so all three bubbles fit in the viewport without scrolling
 
-- `xl+` (≥1280px): 3 bubbles absolutely positioned around photo (see Z-index section below)
-- `md–xl`: 3 bubbles in a column below the photo (in-flow)
+**Photo block** (`absolute bottom-0 left-1/2 -translate-x-1/2`):
 
-**xl+ photo block** (`hidden xl:block absolute bottom-0 left-1/2 -translate-x-1/2`):
-
-The block has `style={{ aspectRatio: "658/836" }}` — its height is derived from its width (`clamp(280px, 36vw, 660px)`) via CSS `aspect-ratio`, **not** from the viewport height. This is critical: bubble `top` percentages are computed against the block's height = photo's natural height, so they stay visually stable regardless of viewport height.
-
-Inside the block there is a single `relative w-full h-full` wrapper that is the **containing block for all three bubbles**. The photo image (`h-full w-full object-cover object-[45%_top]`) fills this wrapper. All bubbles are children of this wrapper (not siblings), so their `position: absolute` + `top: %` values always resolve against photo height.
+The outer div has `containerType: "inline-size"` — establishes a container query context. Height is derived from width via `aspectRatio: "658/836"`. Inside is a `relative w-full h-full` wrapper that is the **containing block for all three bubbles**.
 
 ```
-Do NOT move bubbles outside the relative wrapper — top:% on a sibling of the
-photo would resolve against the outer section height, causing bubbles to shift
-when viewport height changes.
+Do NOT move bubbles outside the relative wrapper — cqw/top positions on a
+sibling of the photo would resolve incorrectly and shift with viewport changes.
 ```
 
-**Photo file:** `vojta_standing_2.png` is landscape (2528×1684). Portrait crop is achieved via `object-cover object-[45%_top]` in a container that has `aspectRatio: "658/836"`. Photo container width: `clamp(280px, 36vw, 660px)`.
+**Bubble sizing — `cqw` units with px cap:**
 
-**Z-index in xl+ layout:**
-- Bubble "Jen si to..." at `z-0`, `left-[-220px]` (fixed px, not %) → appears **behind** photo (z-10). Fixed pixel offset ensures exactly 220px of the card is visible and 60px peeks behind Vojta's arm on any display width. Do **not** change back to a percentage — percentage scales with photo width, pushing the bubble fully off-screen on wide displays.
-- Other two bubbles at `z-20` → appear in **front** of photo
+All bubble dimensions are expressed in `cqw` (1cqw = 1% of photo container width), capped at original design values via CSS `min()`:
 
-**Short viewports (e.g. Windows 150% scaling = 1280×720 CSS px):** The section grows past the viewport fold (hero bottom ~107px below fold). This is intentional — the full portrait photo + heading cannot geometrically fit in 655px available height. Bubbles remain correctly positioned; the page scrolls slightly to reveal the photo bottom (hands).
+| Property | Value |
+|---|---|
+| width | `min(76cqw, 280px)` |
+| font-size | `min(4.9cqw, 18px)` |
+| border-radius | `min(5.15cqw, 19px)` |
+| padding | `min(4.3cqw, 16px) min(3.25cqw, 12px)` |
 
-**Mobile (below md):** Section uses `aspectRatio: "403 / 765"` (natural height, not sticky). Same bubble delays apply.
+Below ~1024px viewport width the photo is narrower than 368px → cqw values are below the px caps → bubbles scale down proportionally. Above ~1024px the px caps kick in → bubbles stay at original 280px/18px regardless of photo size.
+
+**Bubble positions** (all in `cqw`, origin = top-left of photo block):
+
+| Bubble | left | top | z-index |
+|---|---|---|---|
+| 0 "Jen si to…" | `max(-60cqw, -220px)` | `76.2cqw` | z-0 — **behind** photo |
+| 1 "Koučování…" | `71cqw` | `49.5cqw` | z-20 — in front |
+| 2 "Nejlepší rada…" | `83cqw` | `87.7cqw` | z-20 — in front |
+
+`top` in cqw is derived from original `%` of photo height: `top_pct × (836/658) = top_pct × 1.2705`. E.g. `top: 60%` of photo height → `60 × 1.2705 = 76.2cqw`.
+
+Bubble 0 `left: max(-60cqw, -220px)` — never goes further left than 220px from photo edge (original design value), but scales inward proportionally on small photos.
+
+**Photo file:** `vojta_standing_2.png` is landscape (2528×1684). Portrait crop via `object-cover object-[45%_top]` in a container with `aspectRatio: "658/836"`.
+
+**Mobile (below md):** Section uses `aspectRatio: "403 / 765"` (natural height, not viewport-relative). Same bubble delays apply.
 
 ### ScrollRevealText
 
