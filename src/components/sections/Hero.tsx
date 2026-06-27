@@ -51,7 +51,7 @@ export function Hero() {
           style={{ height: "15%", background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%)" }} />
       </section>
 
-      {/* ─── DESKTOP ─── */}
+      {/* ─── DESKTOP (md+) ─── */}
       <section
         className="hidden md:block relative overflow-hidden bg-background"
         style={{ minHeight: `max(calc(100dvh - ${NAV_HEIGHT}px), calc(clamp(280px, 36vw, 660px) * 1.271 + 11rem))` }}
@@ -63,57 +63,72 @@ export function Hero() {
         <img aria-hidden="true" src="/hero_background_logo.svg" alt=""
           className="absolute left-1/2 -translate-x-1/2 top-[clamp(60px,8vw,140px)] w-[57%] pointer-events-none select-none" />
 
-        {/* Heading + md–xl photo + md–xl column bubbles */}
-        <div className="relative z-10 flex flex-col items-center pt-10 px-[var(--px)] h-full">
+        <div className="relative z-10 flex flex-col items-center pt-10 px-[var(--px)]">
           <h1 className="font-medium text-foreground text-center text-h1 w-full">
             Máte to v sobě
           </h1>
-
-          {/* Photo — md to photo-xl (in flow, above column bubbles) */}
-          <div className="photo-xl:hidden relative mx-auto mt-6 w-full max-w-[clamp(280px,36vw,660px)]">
-            <div
-              className="w-full overflow-hidden"
-              style={{ maxHeight: `calc(100vh - ${NAV_HEIGHT}px - 11rem)` }}
-            >
-              <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
-                width={2528} height={1684} className="relative z-10 w-full h-auto object-cover object-[45%_top]"
-                style={{ aspectRatio: "658/836" }} priority />
-            </div>
-          </div>
-
-          {/* Column bubbles — md to photo-xl */}
-          <div className="photo-xl:hidden flex flex-col gap-3 mt-6 pb-12">
-            {bubbles.map((text, i) => (
-              <div key={text} className="w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
-                style={{ animationDelay: `${BUBBLE_DELAYS[i]}ms` }}>
-                <p className="text-body text-left">{text}</p>
-              </div>
-            ))}
-          </div>
         </div>
 
-        {/* Photo + surrounding bubbles — sized by photo aspect ratio, not viewport height */}
+        {/* Photo + surrounding bubbles — single proportional composition for all md+ */}
         <div
-          className="hidden photo-xl:block absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,660px)]"
-          style={{ aspectRatio: "658/836" }}
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 w-[clamp(280px,36vw,660px)]"
+          style={{ aspectRatio: "658/836", containerType: "inline-size" }}
         >
-          {/* relative wrapper = containing block for bubbles; top:% is always % of photo height */}
+          {/* relative wrapper = containing block; top:% resolves against photo height */}
           <div className="relative w-full h-full">
             <Image src="/vojta_standing_2.png" alt="Vojtěch Majer, kouč zvědomit"
               width={2528} height={1684} className="relative z-10 w-full h-full object-cover object-[45%_top]"
               priority />
 
-            <div className="absolute left-[-220px] top-[60%] z-0 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
-              style={{ animationDelay: `${BUBBLE_DELAYS[0]}ms` }}>
-              <p className="text-body text-left">{bubbles[0]}</p>
+            {/* Bubble 0 — behind photo (z-0) */}
+            <div
+              className="absolute z-0 bg-white/90 shadow-bubble animate-bubble-in"
+              style={{
+                left: "-60cqw",
+                top: "76.2cqw",
+                width: "76cqw",
+                borderRadius: "5.15cqw",
+                padding: "4.3cqw 3.25cqw",
+                fontSize: "4.9cqw",
+                lineHeight: "1.5",
+                animationDelay: `${BUBBLE_DELAYS[0]}ms`,
+              }}
+            >
+              <p className="text-left">{bubbles[0]}</p>
             </div>
-            <div className="absolute left-[71%] top-[39%] z-20 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
-              style={{ animationDelay: `${BUBBLE_DELAYS[1]}ms` }}>
-              <p className="text-body text-left">{bubbles[1]}</p>
+
+            {/* Bubble 1 — in front of photo (z-20) */}
+            <div
+              className="absolute z-20 bg-white/90 shadow-bubble animate-bubble-in"
+              style={{
+                left: "71cqw",
+                top: "49.5cqw",
+                width: "76cqw",
+                borderRadius: "5.15cqw",
+                padding: "4.3cqw 3.25cqw",
+                fontSize: "4.9cqw",
+                lineHeight: "1.5",
+                animationDelay: `${BUBBLE_DELAYS[1]}ms`,
+              }}
+            >
+              <p className="text-left">{bubbles[1]}</p>
             </div>
-            <div className="absolute left-[83%] top-[69%] z-20 w-[280px] bg-white/90 rounded-card shadow-bubble flex items-center py-4 px-3 animate-bubble-in"
-              style={{ animationDelay: `${BUBBLE_DELAYS[2]}ms` }}>
-              <p className="text-body text-left">{bubbles[2]}</p>
+
+            {/* Bubble 2 — in front of photo (z-20) */}
+            <div
+              className="absolute z-20 bg-white/90 shadow-bubble animate-bubble-in"
+              style={{
+                left: "83cqw",
+                top: "87.7cqw",
+                width: "76cqw",
+                borderRadius: "5.15cqw",
+                padding: "4.3cqw 3.25cqw",
+                fontSize: "4.9cqw",
+                lineHeight: "1.5",
+                animationDelay: `${BUBBLE_DELAYS[2]}ms`,
+              }}
+            >
+              <p className="text-left">{bubbles[2]}</p>
             </div>
           </div>
         </div>
