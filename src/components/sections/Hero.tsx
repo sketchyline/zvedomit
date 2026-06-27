@@ -84,12 +84,12 @@ export function Hero() {
             <div
               className="absolute z-0 bg-white/90 shadow-bubble animate-bubble-in"
               style={{
-                left: "-60cqw",
+                left: "max(-60cqw, -220px)",
                 top: "76.2cqw",
-                width: "76cqw",
-                borderRadius: "5.15cqw",
-                padding: "4.3cqw 3.25cqw",
-                fontSize: "4.9cqw",
+                width: "min(76cqw, 280px)",
+                borderRadius: "min(5.15cqw, 19px)",
+                padding: "min(4.3cqw, 16px) min(3.25cqw, 12px)",
+                fontSize: "min(4.9cqw, 18px)",
                 lineHeight: "1.5",
                 animationDelay: `${BUBBLE_DELAYS[0]}ms`,
               }}
@@ -103,10 +103,10 @@ export function Hero() {
               style={{
                 left: "71cqw",
                 top: "49.5cqw",
-                width: "76cqw",
-                borderRadius: "5.15cqw",
-                padding: "4.3cqw 3.25cqw",
-                fontSize: "4.9cqw",
+                width: "min(76cqw, 280px)",
+                borderRadius: "min(5.15cqw, 19px)",
+                padding: "min(4.3cqw, 16px) min(3.25cqw, 12px)",
+                fontSize: "min(4.9cqw, 18px)",
                 lineHeight: "1.5",
                 animationDelay: `${BUBBLE_DELAYS[1]}ms`,
               }}
@@ -120,10 +120,10 @@ export function Hero() {
               style={{
                 left: "83cqw",
                 top: "87.7cqw",
-                width: "76cqw",
-                borderRadius: "5.15cqw",
-                padding: "4.3cqw 3.25cqw",
-                fontSize: "4.9cqw",
+                width: "min(76cqw, 280px)",
+                borderRadius: "min(5.15cqw, 19px)",
+                padding: "min(4.3cqw, 16px) min(3.25cqw, 12px)",
+                fontSize: "min(4.9cqw, 18px)",
                 lineHeight: "1.5",
                 animationDelay: `${BUBBLE_DELAYS[2]}ms`,
               }}
