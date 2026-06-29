@@ -23,11 +23,10 @@ function FeatureCard({ icon, heading, body, bg }: FeatureCardProps) {
 
 const featureCards = [
   {
-    icon: "/question_mark_icon.svg",
-    heading:
-      "Stalo se vám už, že po dosažení nějakého cíle přišla menší radost, než jste očekávali?",
-    body: "Koučování pomáhá být přítomnější ve způsobu, jakým přemýšlíte a rozhodujete se už po cestě — místo abyste čekali na radost až za dalším milníkem.",
-    bg: "bg-accent-teal",
+    icon: "/center_arrow_icon.svg",
+    heading: "Koučování jako personalizovaný kurz zvyšování všímavosti",
+    body: "K sobě, vlastním pocitům, tomu, co vás pohání, a tomu, co vás naopak brzdí. Pomocí přesně mířených otázek a koučovacích technik vám pomohu najít kroky vpřed, které vycházejí z vašich hodnot a přesvědčení. Pomohu vám zachytit vaše AHA momenty a dát jim směr.",
+    bg: "bg-accent-green",
   },
   {
     icon: "/brain_icon.svg",
@@ -37,10 +36,11 @@ const featureCards = [
     bg: "bg-surface",
   },
   {
-    icon: "/center_arrow_icon.svg",
-    heading: "Koučování jako personalizovaný kurz zvyšování všímavosti",
-    body: "K sobě, vlastním pocitům, tomu, co vás pohání, a tomu, co vás naopak brzdí. Pomocí přesně mířených otázek a koučovacích technik vám pomohu najít kroky vpřed, které vycházejí z vašich hodnot a přesvědčení. Pomohu vám zachytit vaše AHA momenty a dát jim směr.",
-    bg: "bg-accent-green",
+    icon: "/question_mark_icon.svg",
+    heading:
+      "Stalo se vám už, že po dosažení nějakého cíle přišla menší radost, než jste očekávali?",
+    body: "Koučování pomáhá být přítomnější ve způsobu, jakým přemýšlíte a rozhodujete se už po cestě — místo abyste čekali na radost až za dalším milníkem.",
+    bg: "bg-accent-teal",
   },
 ];
 
