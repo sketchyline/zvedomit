@@ -124,9 +124,6 @@ export function Footer() {
           </p>
 
           <div className="mt-[114px]">
-            <div className="flex gap-4">
-              <a href="#" className="text-[13px] text-white underline">Nastavení cookies</a>
-            </div>
             <p className="mt-3 text-[13px] text-white">© 2026 Zvědomit. Všechna práva vyhrazena.</p>
           </div>
         </div>
@@ -160,9 +157,6 @@ export function Footer() {
 
           <div className="mt-[130px] flex items-center justify-between">
             <p className="text-[14px] text-white">© 2026 Zvědomit. Všechna práva vyhrazena.</p>
-            <div className="flex gap-4">
-              <a href="#" className="text-[14px] text-white underline">Nastavení cookies</a>
-            </div>
           </div>
         </div>
 
