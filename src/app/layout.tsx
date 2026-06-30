@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Gabarito } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const gabarito = Gabarito({
   subsets: ["latin", "latin-ext"],
@@ -28,6 +30,8 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
