@@ -186,6 +186,8 @@ Photo wrapper uses `lg:sticky lg:top-[85px]`. The section itself has `lg:pb-0`; 
 
 `equalizeHeights()` runs on mount and resize to set all feature cards to `minHeight` of the tallest card. Each card uses `h-full` + `mt-auto` on the body text (pins text to the bottom of the card).
 
+**Feature card order:** green (`bg-accent-green`) → gray (`bg-surface`) → teal (`bg-accent-teal`).
+
 ### MyJourney — timeline animation
 
 `TimelineItem` uses `IntersectionObserver` with `threshold: 0.25`. One-way: `observer.disconnect()` after first trigger — items never slide back out when scrolling up.
@@ -218,6 +220,8 @@ State: `activeIndex` (default 1 = center card). Mobile uses `overflow-hidden -mx
 **Dark card** overlaps the photo by 50px (`-mt-[50px] relative z-10`) — intentionally covers feet but leaves hands visible.
 
 **Desktop tagline:** `text-[clamp(1.5rem,3.5vw,4.5rem)] whitespace-nowrap text-center`
+
+**Bottom bar:** copyright line only — no links (podmínky používání and nastavení cookies were removed).
 
 `footer-logo.svg` — no spaces in filename (Linux/Vercel case-sensitive). SVG images need `unoptimized` prop on `next/image`.
 
