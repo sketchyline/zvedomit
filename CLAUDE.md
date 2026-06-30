@@ -20,6 +20,7 @@ No test suite is configured (Playwright is installed as a dependency but no test
 - **Tailwind CSS v3** — JIT, arbitrary values for pixel-perfect spacing
 - **Font:** Gabarito via `next/font/google`, exposed as `--font-gabarito` CSS var
 - **Deploy:** Vercel at `zvedomit.vercel.app` — Linux file system, case-sensitive paths, spaces in filenames cause 404s
+- **Vercel Analytics & Speed Insights** — `@vercel/analytics` and `@vercel/speed-insights` installed; `<Analytics />` and `<SpeedInsights />` rendered at end of `<body>` in `layout.tsx`
 - **Design source:** Figma file key `3rTnaq8VYCr8IBp0RRNPVa`
 
 ## Architecture
